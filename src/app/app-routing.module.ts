@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppMainComponent } from './app-main/app-main.component';
 import { AuthGuard } from './auth.guard';
-import { AppDashboardComponent } from './dashboards/app-dashboard/app-dashboard.component';
 import { ForgotPasswordComponent } from './modules/app-pages/forgot-password/forgot-password.component';
 import { LoginComponent } from './modules/app-pages/login/login.component';
 import { LogoutComponent } from './modules/app-pages/logout/logout.component';
