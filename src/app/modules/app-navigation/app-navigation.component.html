@@ -1,0 +1,30 @@
+<!-- <p-megaMenu [model]="items" [activeItem]="activeItem"></p-tabMenu> -->
+<p-menubar [model]="items">
+  <ng-template pTemplate="end">
+    <!-- <input type="text" pInputText placeholder="Search" /> -->
+
+    <div class="grid">
+      <div class="pt-2">
+        <button pButton pRipple (click)="search()" class="p-button p-button-secondary mr-5 mt-2"><i class="fa fa-search"></i></button>
+      </div>
+      <div class="pt-2">
+        <label class="p-pb-3 mr-2 mb-3" for="themeSwitch">
+          <ng-container *ngIf="!themeMode">Dark Mode</ng-container>
+          <ng-container *ngIf="themeMode">Light Mode</ng-container>
+        </label>
+
+        <span class="p-float-label text-center">
+          <p-inputSwitch
+            [pTooltip]="themeMode ? 'Switch to Dark Mode' : 'Switch to Light Mode'"
+            tooltipPosition="left"
+            id="themeSwitch"
+            label="Dark Mode"
+            styleClass="mr-2"
+            [(ngModel)]="themeMode"
+            (onChange)="changeThemeMode()"
+          ></p-inputSwitch>
+        </span>
+      </div>
+    </div>
+  </ng-template>
+</p-menubar>

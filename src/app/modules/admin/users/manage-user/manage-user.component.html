@@ -1,0 +1,177 @@
+<p-confirmDialog header="Confirmation" icon="fa fa-check"></p-confirmDialog>
+<p-toast key="a"></p-toast>
+<app-spinner *ngIf="isLoading"></app-spinner>
+<p-panel *ngIf="!isLoading" header="Admin" styleClass="m-0">
+  <p-card>
+    <p-panel [header]="mode === 'create' ? 'Add User' : 'Edit User'" styleClass="m-0">
+      <p-toast></p-toast>
+      <app-spinner *ngIf="isLoading"></app-spinner>
+      <div #outer class="p-grid p-jc-center p-p-0 m-0">
+        <div class="p-d-flex p-flex-column">
+          <div
+            [ngClass]="{
+              'pl-2 pr-2': app.isMobile,
+              'mt-auto': !app.isMobile
+            }"
+            class="p-as-center mb-auto"
+          >
+            <div class="p-d-flex p-flex-column">
+              <form role="form" [autocomplete]="false" [formGroup]="form" (submit)="submitForm()">
+                <div class="p-fluid p-formgrid p-grid ml-auto mr-auto col-4 col-md-6">
+                  <div *ngIf="!formIsLoading" class="p-field text-left p-4">
+                    <label for="firstName" style="color: #b3b3b3; font-size: 12px">First Name</label>
+                    <span class="p-float-label">
+                      <input
+                        pInputText
+                        placeholder=""
+                        type="firstName"
+                        formControlName="firstName"
+                        id="firstName"
+                        name="firstName"
+                        aria-describedby="First Name"
+                        [ngClass]="{
+                          'ng-invalid': form.get('firstName').invalid,
+                          'ng-dirty': form.get('firstName').invalid ? false : true
+                        }"
+                        class="f-height-inputs"
+                      />
+                    </span>
+
+                    <small *ngIf="form.get('firstName').invalid && form.get('firstName').touched" class="p-error">Required.</small>
+                  </div>
+
+                  <div *ngIf="!formIsLoading" class="p-field text-left p-4">
+                    <label for="lastName" style="color: #b3b3b3; font-size: 12px">Last Name</label>
+                    <span class="p-float-label">
+                      <input
+                        pInputText
+                        placeholder=""
+                        type="lastName"
+                        formControlName="lastName"
+                        id="lastName"
+                        name="lastName"
+                        aria-describedby="Last Name"
+                        [ngClass]="{
+                          'ng-invalid': form.get('lastName').invalid,
+                          'ng-dirty': form.get('lastName').invalid ? false : true
+                        }"
+                        class="f-height-inputs"
+                      />
+                    </span>
+
+                    <small *ngIf="form.get('lastName').invalid && form.get('lastName').touched" class="p-error">Required.</small>
+                  </div>
+
+                  <div *ngIf="!formIsLoading" class="p-field text-left p-4">
+                    <label for="userRole" style="color: #b3b3b3; font-size: 12px">Role</label>
+                    <span class="p-float-label">
+                      <p-dropdown [options]="roles" formControlName="userRole" optionLabel="name" optionValue="id"></p-dropdown>
+                    </span>
+                    <small *ngIf="form.get('userRole').invalid && form.get('userRole').touched" class="p-error">Required.</small>
+                  </div>
+
+                  <!-- <div *ngIf="formIsLoading" class="p-field col-12 col-md-6 col-lg-4 col-xl-4">
+                    <p-skeleton height="44px"></p-skeleton>
+                  </div> -->
+
+                  <div *ngIf="!formIsLoading" class="p-field text-left p-4">
+                    <label for="email" style="color: #b3b3b3; font-size: 12px">Email / Username</label>
+                    <span class="p-float-label">
+                      <input
+                        pInputText
+                        placeholder="email@example.com"
+                        type="email"
+                        formControlName="email"
+                        id="email"
+                        name="email"
+                        autocomplete="new-email"
+                        aria-describedby="Username or Email"
+                        [ngClass]="{
+                          'ng-invalid': form.get('email').invalid,
+                          'ng-dirty': form.get('email').invalid ? false : true
+                        }"
+                        class="f-height-inputs"
+                      />
+                    </span>
+
+                    <small *ngIf="form.get('email').invalid && form.get('email').touched" class="p-error">Email is required.</small>
+                  </div>
+
+                  <!-- <div *ngIf="formIsLoading" class="field col-12 col-md-6 col-lg-4 col-xl-4">
+                    <label for="firstname">Password</label>
+                    <p-skeleton [shape]="'rectangle'" height="44px"></p-skeleton>
+                    <p-skeleton [shape]="'rectangle'" styleClass="mt-3 mb-5" height="33px" width="137px"></p-skeleton>
+                  </div> -->
+
+                  <div *ngIf="!formIsLoading" class="p-field text-left p-4">
+                    <!-- <span class="float-label">
+                      <p-password
+                        mediumRegex="^(?=.*[a-z])(?=.*[0-9])(?=.{6,})"
+                        strongRegex="^(?=.*[a-z])(?=.*[0-9])(?=.{6,})"
+                        [ngClass]="{
+                          'ng-invalid': form.get('password').invalid,
+                          'ng-dirty': form.get('password').invalid
+                        }"
+                        [toggleMask]="true"
+                        styleClass="mt-2 f-height-inputs-pass"
+                        formControlName="password"
+                        name="password"
+                        id="password"
+                        [feedback]="false"
+                        inputId="passwordInput"
+                        [placeholder]="'********'"
+                      >
+                      </p-password>
+                    </span> -->
+                    <label for="email" style="color: #b3b3b3; font-size: 12px">Password</label>
+                    <span class="p-float-label">
+                      <input
+                        pInputText
+                        placeholder=""
+                        type="password"
+                        formControlName="password"
+                        id="password"
+                        name="password"
+                        aria-describedby="Password"
+                        autocomplete="new-password"
+                        [ngClass]="{
+                          'ng-invalid': form.get('password').invalid,
+                          'ng-dirty': form.get('password').invalid ? false : true
+                        }"
+                        class="f-height-inputs"
+                      />
+                    </span>
+
+                    <small *ngIf="form.get('password').invalid && form.get('password').touched" class="p-error">Password is Invalid.</small>
+                  </div>
+                </div>
+                <div *ngIf="formSubmitted && successFlag" class="p-field text-center">Success!</div>
+                <div *ngIf="formSubmitted && errorFlag" class="p-field text-center">Error!<br /><br />{{ errorMessage }}</div>
+
+                <div *ngIf="formSubmitted && form.invalid" class="p-field text-center">The form is invalid. Please check the errors above and try again.</div>
+                <div class="col-3 col-sm-6 mt-3 md-12 ml-auto mr-auto text-center">
+                  <button
+                    pButton
+                    pRipple
+                    [ngStyle]="{
+                      width: app.isMobile ? '100%' : '85%',
+                      'text-align': 'center'
+                    }"
+                    type="submit"
+                    [label]="mode === 'create' ? 'Create User' : 'Update User'"
+                    class="p-button p-button-primary p-button-large p-4"
+                    [disabled]="form.invalid"
+                    [ngClass]="{
+                      'p-button-error': form.invalid,
+                      'p-button-primary': form.valid
+                    }"
+                  ></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+  </p-card>
+</p-panel>

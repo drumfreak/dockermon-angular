@@ -1,0 +1,140 @@
+.foo {
+  /* VS Code color picker */
+  background: #ffa51d;
+}
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(24, 24, 25) rgb(18, 18, 18);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgb(82, 81, 81);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(27, 27, 27);
+  border-radius: 20px;
+  border: 3px solid rgb(41, 41, 41);
+}
+
+body {
+  font-family: 'Montserrat' !important;
+  font-size: 0.9rem;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.background-transparent {
+  background: rgba(0, 0, 0, 0) !important;
+}
+
+.surface-card {
+  background: rgb(36, 0, 0);
+  background: linear-gradient(0deg, rgb(7, 7, 7) 0%, rgb(19, 18, 18) 78%);
+  border: 1px solid rgb(113, 113, 113);
+}
+
+.surface-card-selected {
+  background: rgba(100, 181, 246, 0.16) !important;
+  color: rgba(255, 255, 255, 0.87);
+  border: 2px solid rgb(20, 37, 135) !important;
+}
+
+.page-header-card {
+  background: rgb(36, 0, 0);
+  background: linear-gradient(0deg, rgb(37, 37, 37) 0%, rgb(18, 13, 13) 78%);
+}
+
+.red-chip {
+  border: 0 none;
+  margin: 0;
+  background: #a30212 !important;
+}
+
+.dark-red-chip {
+  border: 0 none;
+  margin: 0;
+  background: #410007 !important;
+}
+
+.yellow-chip {
+  border: 0 none;
+  margin: 0;
+  background: #828e00 !important;
+}
+
+.orange-chip {
+  background: #e37f05 !important;
+}
+
+.gray-chip {
+  background: #272726 !important;
+}
+
+.green-chip {
+  background: #015c1e !important;
+}
+
+.sprint-chips .p-inputtext {
+  margin: 0;
+  height: 60px;
+  width: 100%;
+}
+
+.p-progressbar {
+  border: 0 none;
+  height: 1.5rem;
+  background: #000000;
+  border-radius: 3px;
+}
+.p-progressbar .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #02a330;
+}
+.p-progressbar .p-progressbar-label {
+  color: #cecece;
+  line-height: 1.5rem;
+}
+
+.p-progress-bar-red .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #a30212 !important;
+}
+
+.p-progress-bar-darkred .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #410007 !important;
+}
+
+.p-progress-bar-yellow .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #d8e305 !important;
+}
+
+.p-progress-bar-orange .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #e37f05 !important;
+}
+
+.p-progress-bar-gray .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #272726 !important;
+}
+
+.p-progress-bar-green .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #015c1e !important;
+}

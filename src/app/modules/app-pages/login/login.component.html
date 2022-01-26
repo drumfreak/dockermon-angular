@@ -1,0 +1,132 @@
+<p-toast></p-toast>
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<div *ngIf="!isLoading" style="margin-top: 5% !important" [ngClass]="app.isMobile ? 'col-11' : 'col-6'" class="ml-auto mr-auto mt-5 pages-body login-bgcolor">
+  <div #outer class="height-100 width-100 display-block p-grid p-jc-center p-p-0 m-0">
+    <div class="col-12 text-center">
+      <div *ngIf="!isLoading">
+        <div class="text-center mt-5">
+          <span class="p-3 shadow-2 mb-1 inline-block surface-card" style="border-radius: 10px">
+            <i class="fa fa-chart-line text-4xl text-blue-500"></i>
+          </span>
+          <h2>DockerMon</h2>
+          <!-- <div class="mb-3 font-bold text-700">
+            <span class="text-700">Docker Monitoring </span>
+            <span class="text-700 text-blue-600">Docker Monitor</span>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="p-d-flex p-flex-column">
+      <div
+        [ngClass]="{
+          'mt-1 pt-1 pl-2 pr-2': app.isMobile,
+          'mt-auto': !app.isMobile
+        }"
+        class="p-as-center mb-auto"
+      >
+        <div class="pages-panel card p-d-flex p-flex-column">
+          <div class="input-panel mt-5 p-d-flex p-flex-column">
+            <p-panel [showHeader]="true" header="Sign In" class="ml-auto mr-auto mb-0">
+              <form role="form" [autocomplete]="true" [formGroup]="form" (submit)="attemptLogin()">
+                <div class="p-fluid p-formgrid p-grid ml-auto mr-auto jc-center">
+                  <div *ngIf="formIsLoading" class="p-field col-12 col-md-6 col-lg-4 col-xl-4">
+                    <!-- <label for="firstname">First Name</label> -->
+                    <p-skeleton height="44px"></p-skeleton>
+                  </div>
+
+                  <div *ngIf="!formIsLoading" class="p-field col-12 col-md-6 col-lg-4 col-xl-4 text-left">
+                    <label for="email" style="color: #b3b3b3; font-size: 12px">Email</label>
+                    <span class="p-float-label">
+                      <input
+                        #emailInput
+                        class="f-height-inputs p-4"
+                        pInputText
+                        placeholder="email@example.com"
+                        type="email"
+                        formControlName="email"
+                        id="email"
+                        name="email"
+                        aria-describedby="Username or Email"
+                        [ngClass]="{
+                          'ng-invalid': form.get('email').invalid,
+                          'ng-dirty': form.get('email').invalid ? false : true
+                        }"
+                      />
+                    </span>
+
+                    <small *ngIf="form.get('email').invalid && form.get('email').touched" class="p-error">Email is required.</small>
+                  </div>
+
+                  <div *ngIf="formIsLoading" class="field col-12 col-md-6 col-lg-4 col-xl-4">
+                    <label for="firstname">Password</label>
+                    <p-skeleton [shape]="'rectangle'" height="44px"></p-skeleton>
+                    <p-skeleton [shape]="'rectangle'" styleClass="mt-3 mb-5" height="33px" width="137px"></p-skeleton>
+                  </div>
+
+                  <div *ngIf="!formIsLoading" class="col-12 col-md-6 col-lg-4 col-xl-4 text-left">
+                    <label for="passwordInput" style="color: #b3b3b3; font-size: 12px">Password</label>
+                    <span class="float-label">
+                      <p-password
+                        pInputPassword
+                        mediumRegex="^(?=.*[a-z])(?=.*[0-9])(?=.{6,})"
+                        strongRegex="^(?=.*[a-z])(?=.*[0-9])(?=.{6,})"
+                        [ngClass]="{
+                          'ng-invalid': form.get('password').invalid,
+                          'ng-dirty': form.get('password').invalid
+                        }"
+                        [toggleMask]="true"
+                        class="p-4 mt-2 f-height-inputs-pass"
+                        formControlName="password"
+                        name="password"
+                        id="password"
+                        [feedback]="false"
+                        inputId="passwordInput"
+                        [placeholder]="'********'"
+                      >
+                      </p-password>
+                    </span>
+
+                    <small *ngIf="form.get('password').invalid && form.get('password').touched" class="p-error">Password is Invalid.</small>
+                  </div>
+                </div>
+                <!--
+                <div class="col-12 p-pt-0 mt-4 ml-auto ml-auto p-text-center">
+                    <p-captcha theme="dark" class="captcha-custom-css" size="small" siteKey="6LeORqkUAAAAAGRFv5gPpi8x8Q3hrW53vOt1EwHK" (onResponse)="recaptchaResponse($event)" (onExpire)="recaptchaExpire($event)"></p-captcha>
+                  <div class="alert alert-danger" *ngIf="registerFormSubmitted && !recaptchaValid">Please verify you're not a robot.</div>
+                </div> -->
+
+                <div *ngIf="loginSubmitted && form.invalid" class="col-11 m-auto alert alert-danger text-center">
+                  The form is invalid. Please check the errors above and try again.
+                </div>
+                <div class="col-12 mt-3 md-12 ml-auto mr-auto p-text-center">
+                  <button
+                    pButton
+                    pRipple
+                    [ngStyle]="{
+                      width: app.isMobile ? '100%' : '85%',
+                      'text-align': 'center'
+                    }"
+                    type="submit"
+                    label="Login"
+                    class="p-button p-button-primary p-button-large p-4"
+                    [disabled]="form.invalid"
+                    [ngClass]="{
+                      'p-button-error': form.invalid || !recaptchaValid,
+                      'p-button-primary': form.valid
+                    }"
+                  ></button>
+                </div>
+
+                <div class="col-12">
+                  <a [routerLink]="['/auth/forgot']" class="small-boy"> Forgot Password? </a>
+                </div>
+              </form>
+            </p-panel>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

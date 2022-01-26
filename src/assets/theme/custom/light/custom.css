@@ -1,0 +1,95 @@
+body {
+  font-family: 'Montserrat' !important;
+  font-size: 1rem;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.p-component {
+  font-family: 'Montserrat' !important;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.parent-chip {
+  background: #ef002b;
+  color: #ffffff;
+}
+
+.p-message-custom {
+  background-color: white !important;
+  border: 1px solid #4a0000 !important;
+  border-width: 0 0 0 6px;
+  color: #495057;
+}
+
+.surface-card-selected {
+  background: rgba(100, 181, 246, 0.16) !important;
+  color: rgba(11, 11, 11, 0.87);
+  border: 2px solid rgb(109, 109, 109) !important;
+}
+
+.red-chip {
+  border: 0 none;
+  margin: 0;
+  background: #a30212 !important;
+}
+
+.dark-red-chip {
+  border: 0 none;
+  margin: 0;
+  background: #410007 !important;
+}
+
+.yellow-chip {
+  border: 0 none;
+  margin: 0;
+  background: #d8e305 !important;
+}
+
+.orange-chip {
+  background: #e37f05 !important;
+}
+
+.gray-chip {
+  background: #272726 !important;
+}
+
+.green-chip {
+  background: #015c1e !important;
+}
+
+.p-progress-bar-red .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #a30212 !important;
+}
+
+.p-progress-bar-darkred .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #410007 !important;
+}
+
+.p-progress-bar-yellow .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #d8e305 !important;
+}
+
+.p-progress-bar-orange .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #e37f05 !important;
+}
+
+.p-progress-bar-gray .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #272726 !important;
+}
+
+.p-progress-bar-green .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #015c1e !important;
+}

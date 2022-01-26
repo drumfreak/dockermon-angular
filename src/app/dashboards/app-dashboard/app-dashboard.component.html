@@ -1,0 +1,66 @@
+<div class="text-center p-col-12">
+  <!-- <p-panel header="Team Velocity" styleClass="p-m-0">
+    <div class="p-col-12 p-text-center">
+      <button class="p-button" routerLink="/velocity">Velocity</button>
+    </div>
+  </p-panel> -->
+  <app-spinner *ngIf="isLoading"></app-spinner>
+  <p-card *ngIf="!isLoading" [ngStyle]="{ height: '100vh !important' }">
+    <div class="p-surface-section text-center mt-5" style="height: 100vh !important">
+      <h2>DockerMon</h2>
+      <div class="mb-3 font-bold text-2xl">
+        <span class="text-blue-600">Docker Monitoring CPU, Memory, Disk Usage</span>
+      </div>
+      <div class="text-700 text-sm mb-6">This app is written becausse I was inspired to track Docker usage</div>
+      <div class="grid">
+        <div class="col-12">
+
+        </div>
+        <div class="col-12 md:col-4 mb-4 px-5">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i class="pi pi-desktop text-4xl text-blue-500"></i>
+          </span>
+          <div class="text-900 mb-3 font-medium">Built for Developers</div>
+          <span class="text-700 text-sm line-height-3">We're here to help.</span>
+        </div>
+        <div class="col-12 md:col-4 mb-4 px-5">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i class="pi pi-lock text-4xl text-blue-500"></i>
+          </span>
+          <div class="text-900 mb-3 font-medium">End-to-End Encryption</div>
+          <span class="text-700 text-sm line-height-3">Because it sounds very complicated.</span>
+        </div>
+        <div class="col-12 md:col-4 mb-4 px-5">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i class="pi pi-check-circle text-4xl text-blue-500"></i>
+          </span>
+          <div class="text-900 mb-3 font-medium">Easy to Use</div>
+          <span class="text-700 text-sm line-height-3">Because it really is.</span>
+        </div>
+        <div class="col-12 md:col-4 mb-4 px-5">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i class="pi pi-globe text-4xl text-blue-500"></i>
+          </span>
+          <div class="text-900 mb-3 font-medium">Fast & Global Support</div>
+          <span class="text-700 text-sm line-height-3">Well, not really, but we like to sound bigger than life.</span>
+        </div>
+        <div class="col-12 md:col-4 mb-4 px-5">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i class="pi pi-github text-4xl text-blue-500"></i>
+          </span>
+          <div class="text-900 mb-3 font-medium">Open Source</div>
+          <span class="text-700 text-sm line-height-3"
+            >In a perfect world, but really this is just an in house project stashed on the back of the company github.
+          </span>
+        </div>
+        <div class="col-12 md:col-4 md:mb-4 mb-0 px-3">
+          <span class="p-3 shadow-2 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i class="pi pi-shield text-4xl text-blue-500"></i>
+          </span>
+          <div class="text-900 mb-3 font-medium">Trusted Securitty</div>
+          <span class="text-700 text-sm line-height-3">Always to be determined.</span>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>

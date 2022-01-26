@@ -1,0 +1,126 @@
+<p-confirmDialog header="Confirmation" icon="fa fa-check"></p-confirmDialog>
+<p-toast key="a"></p-toast>
+<p-panel header="Users" styleClass="m-0">
+  <ng-template pTemplate="header"> </ng-template>
+  <p-card>
+    <div class="col-12 pull-right text-right mr-5">
+      <button class="p-button p-button-secondary button mr-5" [routerLink]="['/admin/users/add']">Add User</button>
+    </div>
+    <p-table
+      styleClass="p-datatable-lg p-datatable-gridlines p-datatable-striped p-datatable-resizable"
+      dataKey="id"
+      [value]="items"
+      [autoLayout]="true"
+      [columns]="cols"
+      responsiveLayout="scroll"
+      [rowHover]="true"
+      [lazy]="true"
+      (onLazyLoad)="loadData($event)"
+      [loading]="isLoading"
+      [showLoader]="true"
+      [paginator]="true"
+      [rows]="10"
+      [totalRecords]="totalRecords"
+      [resizableColumns]="true"
+      [reorderableColumns]="true"
+      stateStorage="local"
+      [stateKey]="localStorageKey"
+      selectionMode="single"
+      [(selection)]="selectedItem"
+      [showCurrentPageReport]="false"
+      [showJumpToPageDropdown]="true"
+      [showJumpToPageInput]="true"
+      [currentPageReportTemplate]="'{currentPage} of {totalPages}'"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <ng-container *ngFor="let col of cols; let first = first; let last = last">
+            <th *ngIf="!last" [pSortableColumn]="col.field">
+              {{ col.header }}
+              <p-sortIcon *ngIf="!last" [field]="col.field"></p-sortIcon>
+              <p-columnFilter *ngIf="!last" [type]="col.fieldType" [field]="col.field" display="menu"></p-columnFilter>
+              <!-- <p-columnFilter type="text" [field]="col.field"></p-columnFilter> -->
+            </th>
+
+            <th *ngIf="last">
+              {{ col.header }}
+            </th>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr class="p-selectable-row">
+          <td *ngIf="isLoading">
+            <p-skeleton></p-skeleton>
+          </td>
+          <td *ngIf="!isLoading">
+            <a [routerLink]="['/admin/users/view', item.id]">{{ item.id }}</a>
+          </td>
+
+          <td *ngIf="isLoading">
+            <p-skeleton></p-skeleton>
+          </td>
+          <td *ngIf="!isLoading">
+            <a [routerLink]="['/admin/users/view', item.id]">{{ item.firstName }}</a>
+          </td>
+
+          <td *ngIf="isLoading">
+            <p-skeleton></p-skeleton>
+          </td>
+          <td *ngIf="!isLoading">
+            <a [routerLink]="['/admin/users/view', item.id]">{{ item.lastName }}</a>
+          </td>
+
+          <td *ngIf="isLoading">
+            <p-skeleton></p-skeleton>
+          </td>
+          <td *ngIf="!isLoading">
+            <a [routerLink]="['/admin/users/view', item.id]">{{ item.email }}</a>
+          </td>
+
+          <td *ngIf="isLoading">
+            <p-skeleton></p-skeleton>
+          </td>
+          <td *ngIf="!isLoading">
+            <a [routerLink]="['/admin/users/view', item.id]">{{ item.role?.name }}</a>
+          </td>
+
+          <td *ngIf="isLoading">
+            <p-skeleton></p-skeleton>
+          </td>
+          <td *ngIf="!isLoading">
+            <a [routerLink]="['/admin/users/view', item.id]">{{ item.createdAt | date: 'short' }}</a>
+          </td>
+
+          <td *ngIf="isLoading">
+            <p-skeleton></p-skeleton>
+          </td>
+          <td *ngIf="!isLoading">
+            <button class="p-button button" [routerLink]="['/admin/users/edit', item.id]">Edit</button>
+            <button class="p-button p-button-danger button-danger ml-2 mr-2" (click)="confirmDelete(item)">Delete</button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</p-panel>
+
+<p-toast (onClose)="closeConfirmDelete()" position="center" key="c" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="p-flex p-flex-column" style="flex: 1">
+      <div class="text-center">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+        <h4>{{ message.summary }}</h4>
+        <p>{{ message.detail }}</p>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-6 text-center">
+          <button type="button" pButton (click)="deleteItem()" label="Yes" class="p-button-success"></button>
+        </div>
+        <div class="col-6 text-center">
+          <button type="button" (click)="closeConfirmDelete()" pButton label="No" class="p-button-secondary"></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>

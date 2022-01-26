@@ -1,0 +1,141 @@
+<p-card>
+  <div class="p-fluid p-formgrid p-grid ml-auto mr-auto col-12 lg:col-8 md:col-10 xl:col-6">
+    <div class="p-col-12 p-sm-12 p-md-12 plg-12 p-text-centerp-mt-3">
+      <div class="p-inputgroup p-ml-auto p-pt-3 p-pr-4 p-mr-auto p-col-6 p-col-sm-12 p-col-md-6 p-col-lg-6 p-col-xl-6">
+        <input
+          #searchInput
+          [(ngModel)]="searchTerm"
+          autocomplete="off"
+          autocorrect="off"
+          type="text"
+          pInputText
+          placeholder="Keyword"
+          placeholder="Search for..."
+          aria-label="Search"
+          aria-describedby="basic-search"
+          (keyup.enter)="search()"
+          [showDelay]="500"
+          class="search-input p-text-right"
+          pTooltip="Search by entering a keyword or an Id"
+          tooltipPosition="bottom"
+        />
+        <span class="p-inputgroup-addon">
+          <button
+            pButton
+            pRipple
+            type="submit"
+            icon="fa fa-search"
+            style="width: 120px"
+            label="Search"
+            class="p-button-rounded p-button-text p-button-success"
+            (click)="search()"
+          ></button>
+        </span>
+      </div>
+    </div>
+  </div>
+</p-card>
+<p-panel header="Results" *ngIf="results && results.hits">
+  <h2>{{ results.hits.total.value | number }} Results</h2>
+
+  <p-table
+    styleClass="p-datatable p-datatable-gridlines p-datatable-lg p-datatable-striped p-datatable-resizable"
+    dataKey="id"
+    [value]="results.results"
+    [autoLayout]="true"
+    [columns]="cols"
+    responsiveLayout="scroll"
+    [rowHover]="true"
+    [lazy]="false"
+    (onLazyLoad)="loadData($event)"
+    [loading]="isLoading"
+    [showLoader]="true"
+    [paginator]="true"
+    [rows]="10"
+    [totalRecords]="results.hits.total.value"
+    [resizableColumns]="true"
+    [reorderableColumns]="true"
+    selectionMode="single"
+    [showCurrentPageReport]="false"
+    [showJumpToPageDropdown]="true"
+    [showJumpToPageInput]="true"
+    [currentPageReportTemplate]="'{currentPage} of {totalPages}'"
+  >
+    <!--
+          [(selection)]="selectedItem"
+
+          stateStorage="local"
+[stateKey]="localStorageKey" -->
+    <ng-template pTemplate="header">
+      <tr>
+        <ng-container *ngFor="let col of cols; let first = first; let last = last">
+          <th *ngIf="col.fieldType !== 'custom'" [pSortableColumn]="col.field">
+            {{ col.header }}
+            <p-sortIcon *ngIf="!last" [field]="col.field"></p-sortIcon>
+            <!-- <p-columnFilter *ngIf="!last" [type]="col.fieldType" [field]="col.field" display="menu"></p-columnFilter> -->
+            <!-- <p-columnFilter type="text" [field]="col.field"></p-columnFilter> -->
+          </th>
+          <!--
+          <th class="text-center" *ngIf="col.fieldType === 'custom' || last">
+            {{ col.header }}
+          </th> -->
+        </ng-container>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td *ngIf="isLoading">
+          <p-skeleton></p-skeleton>
+        </td>
+        <td *ngIf="!isLoading">
+          <div style="width: 100px">
+            <p-progressBar [value]="item.relevance"></p-progressBar>
+          </div>
+        </td>
+
+        <td *ngIf="isLoading">
+          <p-skeleton></p-skeleton>
+        </td>
+        <td *ngIf="!isLoading" class="col-6">
+          <a [routerLink]="['/', item.index, 'view', item.contentId]">{{ item.resultText || 'no text' }}</a>
+          <!-- {{ item | json }} -->
+        </td>
+
+        <td *ngIf="isLoading">
+          <p-skeleton></p-skeleton>
+        </td>
+        <td *ngIf="!isLoading">
+          <a [routerLink]="['/', item.index, 'view', item.contentId]">{{ item.type || 'no type' }}</a>
+        </td>
+
+        <td *ngIf="isLoading">
+          <p-skeleton></p-skeleton>
+        </td>
+        <td *ngIf="!isLoading">
+          <a [routerLink]="['/users', item.contentId]">{{ item.author || 'no author' }}</a>
+        </td>
+
+        <td *ngIf="isLoading">
+          <p-skeleton></p-skeleton>
+        </td>
+        <td *ngIf="!isLoading">
+          <a [routerLink]="['/', item.index, 'view', item.contentId]">{{ item.createdAt | date: 'short' || 'no date' }}</a>
+        </td>
+        <!--
+        <td *ngIf="isLoading">
+          <p-skeleton></p-skeleton>
+        </td>
+        <td *ngIf="!isLoading">Action</td> -->
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <tr *ngIf="!items || items?.length === 0">
+        <td [attr.colspan]="cols.length" class="text-center">
+          <div class="no-results col-12 text-center">No Results</div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <app-code-highlighter *ngIf="!isLoading" ngClass="mt-1" [code]="results" [isActive]="false"></app-code-highlighter>
+</p-panel>

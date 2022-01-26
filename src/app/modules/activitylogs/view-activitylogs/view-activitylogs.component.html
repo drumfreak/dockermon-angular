@@ -1,0 +1,27 @@
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<p-panel *ngIf="!isLoading" styleClass="m-0" header="Activity Log">
+  <p-card>
+    <h2>{{ activityLog.name }}</h2>
+    <!-- <button class="p-button button" [routerLink]="['/stages/edit', stage.id]">Edit</button> -->
+    <app-code-highlighter
+      *ngIf="activityLog.contentDiff.added !== {}"
+      title="Diff Added"
+      [code]="activityLog.contentDiff.added"
+      [isActive]="true"
+    ></app-code-highlighter>
+    <app-code-highlighter
+      *ngIf="activityLog.contentDiff.updated !== '{}'"
+      title="Diff Updated"
+      [code]="activityLog.contentDiff.updated"
+      [isActive]="true"
+    ></app-code-highlighter>
+    <app-code-highlighter
+      *ngIf="activityLog.contentDiff.deleted !== {}"
+      title="Diff Deleted"
+      [code]="activityLog.contentDiff.deleted"
+      [isActive]="true"
+    ></app-code-highlighter>
+    <app-code-highlighter title="Full Log" [code]="activityLog" [isActive]="false"></app-code-highlighter>
+  </p-card>
+</p-panel>

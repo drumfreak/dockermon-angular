@@ -1,0 +1,295 @@
+<app-spinner *ngIf="isLoading"></app-spinner>
+<p-panel *ngIf="!isLoading" header="Team Velocity" class="p-col-12">
+  <div class="grid flex justify-content-center text-center">
+    <!-- <div class="col" *ngIf="authorized">
+            <button class="p-button" routerLink="/velocity">View All Velocity</button>
+        </div>
+
+        <div class="col" *ngIf="!authorized">
+            <button class="p-button danger" (click)="oauthRedirect()">Authorize</button>
+        </div> -->
+    <h2>Team Lead: {{ sprints[0].teamLead }}</h2>
+    <!-- <div class="col-12">
+      <h6>How do you calculate JIRA Velocity?</h6>
+    </div>
+    <p style="width: 25%">Simply add up the total of story points completed from each sprint, then divide by the number of sprints. So, your average sprint velocity is 96 ÷ 3 = 32.</p> -->
+    <div class="col-12 ml-auto mr-auto">
+      <p-dropdown ngClass="navigationDropdown" [options]="sprintList" (onChange)="selectSprint($event)" optionLabel="sprint"></p-dropdown>
+      <p-button label="Go" (onClick)="goToSprint()"></p-button>
+    </div>
+  </div>
+</p-panel>
+
+<ng-container *ngIf="!isLoading">
+  <ng-container *ngFor="let sprint of sprints">
+    <ng-container ngClass="mb-5" *ngFor="let developer of sprint.team">
+      <p-panel styleClass="mt-5 mb-5 ml-5 mr-5" [header]="'Developer Report - ' + developer.developerName" [toggleable]="true">
+        <p-card styleClass="p-shadow-3">
+          <h2>{{ developer.developerName }} - {{ sprint.sprint }}</h2>
+          <h6>{{ sprint.sprintStartDate | date: 'fullDate' }} to {{ sprint.sprintEndDate | date: 'fullDate' }}</h6>
+
+          <p-tabView (onChange)="tabClick($event)">
+            <p-tabPanel header="Points">
+              <div class="grid">
+                <div class="col-5 col-sm-5 mt-5">
+                  <p-table
+                    [showLoader]="true"
+                    [value]="[developer]"
+                    styleClass="mt-5 datatable-gridlines datatable-striped p-datatable-striped p-datatable-lg"
+                    responsiveLayout="scroll"
+                  >
+                    <ng-template pTemplate="header"> </ng-template>
+                    <ng-template pTemplate="body" let-developer>
+                      <ng-container>
+                        <tr>
+                          <td class="p-3 tableValueImportant">Total Points Assigned</td>
+                          <td class="p-3 tableValueImportant">
+                            {{ developer.totalPoints || 0 }}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="p-3 tableValue">Points In Flight</td>
+                          <td class="p-3 tableValue">
+                            {{ developer.totalPointsInFlight || 0 }}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="p-3 tableValue">% In Flight</td>
+                          <td class="p-3 tableValue">
+                            <div style="width: 200px !important">
+                              <p-progressBar
+                                mode="determinate"
+                                [value]="math.round((developer.totalPointsInFlight / developer.totalPoints) * 100)"
+                              ></p-progressBar>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="p-3 tableValue">Points Awaiting QA</td>
+                          <td class="p-3 tableValue">
+                            {{ developer.totalPointsQA || 0 }}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="p-3 tableValue">% Awaiting QA</td>
+                          <td class="p-3 tableValue">
+                            <div style="width: 200px !important">
+                              <p-progressBar [value]="math.round((developer.totalPointsQA / developer.totalPoints) * 100)"></p-progressBar>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="p-3 tableValue">Points Blocked</td>
+                          <td class="p-3 tableValue">
+                            {{ developer.totalPointsBlocked || 0 }}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="p-3 tableValue">% Blocked</td>
+                          <td class="p-3 tableValue">
+                            <div style="width: 200px !important">
+                              <p-progressBar [value]="math.round((developer.totalPointsBlocked / developer.totalPoints) * 100)"></p-progressBar>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="p-3 tableValue">Points Awaiting PR</td>
+                          <td class="p-3 tableValue">
+                            {{ developer.totalPointsPR || 0 }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="p-3 tableValue">% Awaiting PR</td>
+                          <td class="p-3 tableValue">
+                            <div style="width: 200px !important">
+                              <p-progressBar [value]="math.round((developer.totalPointsPR / developer.totalPoints) * 100)"></p-progressBar>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="p-3 tableValue">Points Complete</td>
+                          <td class="p-3 tableValue">
+                            {{ developer.totalPointsComplete || 0 }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="p-3 tableValue">% Points Complete</td>
+                          <td class="p-3 tableValue">
+                            <div style="width: 200px !important">
+                              <p-progressBar [value]="math.round((developer.totalPointsComplete / developer.totalPoints) * 100)"></p-progressBar>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-template>
+                  </p-table>
+                </div>
+                <div class="col-7">
+                  <div class="col-12">
+                    <div class="grid col-12">
+                      <div class="col-6">
+                        <p-panel header="Story Points" [toggleable]="true">
+                          <app-velocity-chart-bar [developer]="developer"></app-velocity-chart-bar>
+                        </p-panel>
+                      </div>
+                      <div class="col-6">
+                        <p-panel header="Story Points" [toggleable]="true">
+                          <app-velocity-chart-donut [developer]="developer"></app-velocity-chart-donut>
+                        </p-panel>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel header="Stories" [ngStyle]="{ height: '700px' }">
+              <div class="grid">
+                <div class="col-5 mt-5">
+                  <p-table
+                    [showLoader]="true"
+                    [value]="[developer]"
+                    styleClass="mt-5 datatable-gridlines datatable-striped p-datatable-lg"
+                    responsiveLayout="scroll"
+                  >
+                    <ng-template pTemplate="header"> </ng-template>
+                    <ng-template pTemplate="body" let-developer>
+                      <tr>
+                        <td class="p-3 tableValueImportant">Total Stories Assigned</td>
+                        <td class="p-3 tableValueImportant">
+                          {{ developer.totalStories || 0 }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 tableValue">Stories In Flight</td>
+                        <td class="p-3 tableValue">
+                          {{ developer.totalStoriesInFlight || 0 }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 tableValue">% In Flight</td>
+                        <td class="p-3 tableValue">
+                          <div style="width: 200px !important">
+                            <p-progressBar [value]="math.round((developer.totalStoriesInFlight / developer.totalStories) * 100)"></p-progressBar>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 tableValue">Stories Awaiting QA</td>
+                        <td class="p-3 tableValue">
+                          {{ developer.totalStoriesQA || 0 }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 tableValue">% Awaiting QA</td>
+                        <td class="p-3 tableValue">
+                          <div style="width: 200px !important">
+                            <p-progressBar [value]="math.round((developer.totalStoriesQA / developer.totalStories) * 100)"></p-progressBar>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="p-3 tableValue">Stories Blocked</td>
+                        <td class="p-3 tableValue">
+                          {{ developer.totalStoriesBlocked || 0 }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 tableValue">% Blocked</td>
+                        <td class="p-3 tableValue">
+                          <div style="width: 200px !important">
+                            <p-progressBar color="#ff0000" [value]="math.round((developer.totalStoriesBlocked / developer.totalStories) * 100)"></p-progressBar>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="p-3 tableValue">Stories Awaiting PR</td>
+                        <td class="p-3 tableValue">
+                          {{ developer.totalStoriesPR || 0 }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 tableValue">% Awaiting PR</td>
+                        <td class="p-3 tableValue">
+                          <div style="width: 200px !important">
+                            <p-progressBar [value]="math.round((developer.totalStoriesPR / developer.totalStories) * 100)"></p-progressBar>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 tableValue">Total Stories Complete</td>
+                        <td class="p-3 tableValue">
+                          {{ developer.totalStoriesComplete || 0 }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-3 tableValue">% Stories Complete</td>
+                        <td class="p-3 tableValue">
+                          <div style="width: 200px !important">
+                            <p-progressBar [value]="math.round((developer.totalStoriesComplete / developer.totalStories) * 100)"></p-progressBar>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+                <div class="col-7">
+                  <div class="grid col-12">
+                    <div class="col-6">
+                      <p-panel header="Story Count" [toggleable]="true">
+                        <app-velocity-chart-bar mode="Stories" [developer]="developer"></app-velocity-chart-bar>
+                      </p-panel>
+                    </div>
+                    <div class="col-6">
+                      <p-panel header="Story Count" [toggleable]="true">
+                        <app-velocity-chart-donut mode="Stories" [developer]="developer"></app-velocity-chart-donut>
+                      </p-panel>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-tabPanel>
+          </p-tabView>
+
+          <p-panel [header]="developer.stories.length + ' Developer Stories - ' + developer.developerName" [toggleable]="true">
+            <p-card styleClass="p-shadow-3">
+              <p-table
+                [showLoader]="true"
+                [value]="[developer.stories]"
+                styleClass="datatable-gridlines datatable-striped p-datatable-lg"
+                responsiveLayout="scroll"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Story Id</th>
+                    <th class="text-center">Points</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Type</th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-stories>
+                  <tr *ngFor="let story of stories">
+                    <td class="p-3 tableValue">{{ story.id }}</td>
+                    <td class="p-3 tableValue text-center">{{ story.points }}</td>
+                    <td class="p-3 tableValue text-center">{{ story.status }}</td>
+                    <td class="p-3 tableValue text-center">{{ story.type }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </p-card>
+          </p-panel>
+        </p-card>
+      </p-panel>
+    </ng-container>
+  </ng-container>
+  <app-code-highlighter [code]="sprints"></app-code-highlighter>
+</ng-container>

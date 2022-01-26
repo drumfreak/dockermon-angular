@@ -1,0 +1,110 @@
+<p-panel>
+  <div class="col-12 text-right ml-auto mr-auto surface-section">
+    <div style="height: 40px">
+      <label for="navigationDropDown">Container </label>
+      <p-dropdown
+        *ngIf="!isLoading"
+        styleClass="navigationDropdown"
+        [(ngModel)]="selectedContainer"
+        [options]="containers"
+        (onChange)="selectContainer($event)"
+        optionLabel="name"
+      ></p-dropdown>
+      <p-dropdown
+        *ngIf="isLoading"
+        style="width:350px"
+        [options]="[ { name: 'Loading...           ' } ]"
+        styleClass="navigationDropdown"
+        optionLabel="name"
+      ></p-dropdown>
+    </div>
+  </div>
+  <!-- <div *ngIf="isLoading" class="col-12 text-center ml-auto mr-auto">
+    <app-spinner style="height:25px;"></app-spinner>
+  </div> -->
+  <!-- <pre>
+  {{ selectedContainer | json }}
+</pre> -->
+</p-panel>
+<p-card>
+  <!-- <pre>{{ lastStats | json }}</pre> -->
+  <div class="surface-section text-center mt-2 mb-0 pt-4">
+    <h2>{{ selectedContainer?.name || 'Loading...' }}</h2>
+    <div class="mb-3 font-bold text-2xl">
+      <span class="text-900">{{ selectedContainer?.containerId || '' }}</span>
+    </div>
+    <!-- <div class="text-700 text-sm mb-6">This app is written because I couldn't make a Powerpoint.</div> -->
+    <div class="flex justify-content-center flex-wrap card-container green-300">
+      <div class="col-3 sm:col-3 mb-2 px-5">
+        <a routerLink="/" style="cursor: pointer green-300">
+          <span class="p-3 col-6 shadow-3 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i class="fa fa-microchip text-4xl text-green-500"></i>
+            <h5>{{ lastStats.cpu | number }}%<br /></h5>
+            <div class="text-900 mb-3 font-medium">CPU</div>
+          </span>
+        </a>
+      </div>
+      <div class="col-3 sm:col-3 mb-2 px-5">
+        <a routerLink="/" style="cursor: pointer green-300">
+          <span class="p-3 col-6 shadow-3 mb-3 inline-block surface-card" style="border-radius: 10px">
+            <i class="fa fa-memory text-4xl text-green-500"></i>
+            <h5>
+              {{ lastStats.memory * 0.000000001 | number }} of {{ lastStats.memoryLimit * 0.000000001 | number }} GB<br />
+              {{ lastStats.memoryPercent }}%
+            </h5>
+            <div class="text-900 mb-3 font-medium">Memory</div>
+          </span>
+        </a>
+      </div>
+      <div class="col-3 sm:col-3 mb-2 px-5">
+        <a routerLink="/" style="cursor: pointer green-300">
+          <span class="p-3 col-6 shadow-3 mb-1 inline-block surface-card" style="border-radius: 10px">
+            <i class="fa fa-save text-4xl text-green-500"></i>
+            <h5>
+              {{ lastStats.blockRead * 0.000001 | number }} MB Read <br />
+              {{ lastStats.blockWrite * 0.000001 | number }} MB Write
+            </h5>
+            <div class="text-900 mb-3 font-medium">Disk</div>
+          </span>
+        </a>
+      </div>
+
+      <div class="col-3 sm:col-3 mb-2 px-5">
+        <a routerLink="/" style="cursor: pointer green-300">
+          <span class="p-3 col-6 shadow-3 mb-1 inline-block surface-card" style="border-radius: 10px">
+            <i class="fa fa-network-wired text-4xl text-green-500"></i>
+            <h5>
+              {{ lastStats.networkIn * 0.000001 | number }} MB In <br />
+              {{ lastStats.networkOut * 0.000001 | number }} MB Out
+            </h5>
+            <div class="text-900 mb-3 font-medium">Network</div>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</p-card>
+<app-code-highlighter *ngIf="!isLoading" [code]="containerDetails"></app-code-highlighter>
+<p-card>
+  <div class="grid surface-section p-3">
+    <div class="col-6">
+      <app-docker-cpu-line-chart #cpuChart [cpuData]="statsCPU" [dateData]="statsDates"></app-docker-cpu-line-chart>
+      <div class="col-12 mt-1"></div>
+      <app-docker-processes-bar-chart #processesChart [chartData]="statsProcesses" [dateData]="statsDates"></app-docker-processes-bar-chart>
+    </div>
+    <div class="col-6">
+      <app-docker-memory-line-chart #memoryChart [chartData]="statsMemory" [dateData]="statsDates"></app-docker-memory-line-chart>
+      <div class="col-12 mt-1"></div>
+      <app-docker-network-line-chart
+        #networkChart
+        [chartData1]="statsNetworkIn"
+        [chartData2]="statsNetworkOut"
+        [dateData]="statsDates"
+      ></app-docker-network-line-chart>
+    </div>
+  </div>
+</p-card>
+
+<!-- <pre>
+  {{ containers | json }}
+</pre> -->

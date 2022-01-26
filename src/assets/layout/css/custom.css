@@ -1,0 +1,63 @@
+.layout-topbar-dark .layout-topbar .layout-topbar-left .layout-menu-button {
+  color: #ffffff;
+  background: rgba(100, 181, 246, 0.16);
+  border-color: rgba(100, 181, 246, 0.16);
+  color: rgba(255, 255, 255, 0.87);
+}
+.layout-topbar-dark .layout-topbar .layout-topbar-left .layout-menu-button:hover {
+  background-color: rgb(18 18 18) !important;
+  transition: background-color 0.2s;
+}
+
+.layout-wrapper .layout-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+.layout-wrapper .layout-main .layout-content {
+  /* padding: 2rem; */
+  /* padding-top: 1rem; */
+  padding: 0px !important;
+  flex: 1 1 0;
+}
+
+.layout-config-button.p-button {
+  position: fixed;
+  top: 1%;
+  right: 9rem;
+  z-index: 1000;
+  width: auto;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: transparent;
+  border: none;
+}
+.layout-config-button.p-button .p-button-icon {
+  font-size: 2rem;
+  background-color: transparent;
+  color: hsla(235, 15%, 31%, 0.719);
+}
+
+.layout-topbar .layout-topbar-left {
+  background-color: transparent !important;
+}
+
+.widget-list-hover li {
+  padding: 8px;
+}
+.widget-list-hover li:hover {
+  background-color: #393939;
+}
+
+.widget-panel-border {
+  border: 1px solid #2c4152;
+}
+
+.foo {
+  color: #3b3b5f;
+}
+
+.fc-event {
+  height: 40px !important;
+}

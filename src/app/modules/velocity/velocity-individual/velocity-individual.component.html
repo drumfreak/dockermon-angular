@@ -1,0 +1,122 @@
+<div ngClass="mb-5">
+  <p-tabView (onChange)="tabClick($event)">
+    <p-tabPanel header="Points">
+      <div class="col-12">
+        <p-table [showLoader]="false" [value]="[developer]" styleClass="p-datatable-gridlines datatable-striped p-datatable-striped p-datatable-lg col-12">
+          <ng-template pTemplate="body" let-developer>
+            <tr *ngIf="isMobile" class="col-12" style="height: 332px">
+              <td colspan="2" class="col-12 p-3 tableValueImportant">
+                <app-velocity-chart-bar mode="Points" [developer]="developer"></app-velocity-chart-bar>
+              </td>
+            </tr>
+            <tr *ngIf="!isMobile" class="col-12" style="height: 332px">
+              <td class="col-6 p-3 tableValueImportant">
+                <app-velocity-chart-bar mode="Points" [developer]="developer"></app-velocity-chart-bar>
+              </td>
+              <td class="col-6 p-3 tableValueImportant">
+                <app-velocity-chart-donut mode="Points" [developer]="developer"></app-velocity-chart-donut>
+              </td>
+            </tr>
+            <tr>
+              <td class="col-6 col-sm-12 p-3 tableValueImportant">{{ developer.storyPoints || 0 }} Total Points Assigned</td>
+              <td class="col-6 col-sm-12 p-3 tableValueImportant"></td>
+            </tr>
+            <tr>
+              <td class="p-3 tableValue">{{ developer.storyPointsInProgress || 0 }} Points In Progress</td>
+              <td class="p-3 tableValue">
+                <p-progressBar mode="determinate" [value]="math.round((developer.storyPointsInProgress / developer.storyPoints) * 100)"></p-progressBar>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-3 tableValue">
+                {{ developer.storyPointsAwaitingQA || 0 }}
+                Points Awaiting QA
+              </td>
+              <td class="p-3 tableValue">
+                <p-progressBar [value]="math.round((developer.storyPointsAwaitingQA / developer.storyPoints) * 100)"></p-progressBar>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="p-3 tableValue">{{ developer.storyPointsBlocked || 0 }} Points Blocked</td>
+              <td class="p-3 tableValue">
+                <p-progressBar [value]="math.round((developer.storyPointsBlocked / developer.storyPoints) * 100)"></p-progressBar>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-3 tableValue">{{ developer.storyPointsAwaitingPR || 0 }} Points Awaiting PR</td>
+              <td class="p-3 tableValue">
+                <p-progressBar [value]="math.round((developer.storyPointsAwaitingPR / developer.storyPoints) * 100)"></p-progressBar>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-3 tableValue">{{ developer.storyPointsComplete || 0 }} Points Complete</td>
+              <td class="p-3 tableValue">
+                <p-progressBar [value]="math.round((developer.storyPointsComplete / developer.storyPoints) * 100)"></p-progressBar>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Stories">
+      <div class="col-12" *ngIf="mode === 'Stories'">
+        <p-table [showLoader]="false" [value]="[developer]" styleClass="p-datatable-gridlines datatable-striped p-datatable-striped p-datatable-lg col-12">
+          <ng-template pTemplate="body" let-developer>
+            <tr *ngIf="isMobile" style="height: 332px">
+              <td colspan="2" class="col-12 p-3 tableValueImportant">
+                <app-velocity-chart-bar *ngIf="developer" mode="Stories" [developer]="developer"></app-velocity-chart-bar>
+              </td>
+            </tr>
+            <tr *ngIf="!isMobile" style="height: 332px">
+              <td class="col-6 p-3 tableValueImportant">
+                <app-velocity-chart-bar mode="Stories" [developer]="developer"></app-velocity-chart-bar>
+              </td>
+              <td class="col-6 p-3 tableValueImportant" style="height: 332px">
+                <app-velocity-chart-donut mode="Stories" [developer]="developer"></app-velocity-chart-donut>
+              </td>
+            </tr>
+            <tr>
+              <td class="col-6 col-sm-12 p-3 tableValueImportant">{{ developer.storyCount || 0 }} Total Stories Assigned</td>
+              <td class="col-6 col-sm-12 p-3 tableValueImportant"></td>
+            </tr>
+            <tr>
+              <td class="p-3 tableValue">{{ developer.storiesInProgress || 0 }} Stories In Progress</td>
+              <td class="p-3 tableValue">
+                <p-progressBar mode="determinate" [value]="math.round((developer.storiesInProgress / developer.storyCount) * 100)"></p-progressBar>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-3 tableValue">
+                {{ developer.storiesAwaitingQA || 0 }}
+                Stories Awaiting QA
+              </td>
+              <td class="p-3 tableValue">
+                <p-progressBar [value]="math.round((developer.storiesAwaitingQA / developer.storyCount) * 100)"></p-progressBar>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="p-3 tableValue">{{ developer.storiesBlocked || 0 }} Points Blocked</td>
+              <td class="p-3 tableValue">
+                <p-progressBar [value]="math.round((developer.storiesBlocked / developer.storyCount) * 100)"></p-progressBar>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-3 tableValue">{{ developer.storyPointsAwaitingPR || 0 }} Points Awaiting PR</td>
+              <td class="p-3 tableValue">
+                <p-progressBar [value]="math.round((developer.storiesAwaitingPR / developer.storyCount) * 100)"></p-progressBar>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-3 tableValue">{{ developer.storyPointsComplete || 0 }} Points Complete</td>
+              <td class="p-3 tableValue">
+                <p-progressBar [value]="math.round((developer.storiesComplete / developer.storyCount) * 100)"></p-progressBar>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div>
