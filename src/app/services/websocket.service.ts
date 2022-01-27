@@ -10,7 +10,6 @@ export class WebSocketService {
 
   constructor(private socket: Socket) {
     console.log('Socket Connecting...');
-    this.socket.connect();
   }
 
   private messageSource = new BehaviorSubject('');

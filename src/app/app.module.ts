@@ -20,7 +20,10 @@ import { AppDashboardModule } from './dashboards/app-dashboard/app-dashboard.mod
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { WebSocketService } from './services/websocket.service';
 
-const config: SocketIoConfig = { url: 'http://localhost:3810', options: {} };
+const config: SocketIoConfig = {
+  url: 'ws://localhost:3810',
+  options: {},
+};
 
 @NgModule({
   declarations: [AppComponent],
