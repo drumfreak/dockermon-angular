@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 const API_URL = environment.apiUrl;
-// const API_URL = 'https://admin.echelonfit.com/api/customers';
 
 @Injectable({
   providedIn: 'root',

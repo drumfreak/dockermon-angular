@@ -8,7 +8,7 @@ import { DockerCpuLineChartComponent } from './charts/docker-cpu-line-chart/dock
 import { DockerMemoryLineChartComponent } from './charts/docker-memory-line-chart/docker-memory-line-chart.component';
 import { DockerProcessesBarChartComponent } from './charts/docker-processes-bar-chart/docker-processes-bar-chart.component';
 import { DockerNetworkLineChartComponent } from './charts/docker-network-line-chart/docker-network-line-chart.component';
-
+import { WebSocketService } from 'src/app/services/websocket.service';
 @Component({
   selector: 'app-docker',
   templateUrl: './docker.component.html',
@@ -34,6 +34,8 @@ export class DockerComponent implements OnInit, OnDestroy {
   refresh = false;
   timerSubscription: Subscription = new Subscription();
 
+  messages: string[] = [];
+
   @ViewChild('cpuChart') cpuChartViewChild: DockerCpuLineChartComponent =
     {} as DockerCpuLineChartComponent;
   @ViewChild('memoryChart')
@@ -51,11 +53,22 @@ export class DockerComponent implements OnInit, OnDestroy {
     private dockerService: DockerService,
     private router: Router,
     private route: ActivatedRoute,
+    private socketService: WebSocketService,
   ) {
     this.localID = localID;
   }
 
   async ngOnInit() {
+    console.log('Calling ngOnInit');
+    this.socketService.sendMessage('getContainers', { limit: 1000 });
+
+    this.socketService.listener().subscribe((data: any) => {
+      console.log('Listener Setup');
+      if (data) {
+        console.log('Socket message', data);
+      }
+    });
+
     const r = await this.dockerService.getContainersPaginated({}).toPromise();
     let containers: any = [];
     if (r.status === 'success') {
@@ -91,7 +104,7 @@ export class DockerComponent implements OnInit, OnDestroy {
       } else {
         this.containers = containers;
         this.selectedContainer = containers[0];
-        this.containerDetails = containers[0].details;
+        this.containerDetails = containers[0].details || {};
       }
       this.getContainerStats();
     });

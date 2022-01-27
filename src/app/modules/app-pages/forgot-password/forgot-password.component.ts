@@ -31,7 +31,12 @@ export class ForgotPasswordComponent implements OnInit {
   linkSent = false;
   form: any;
 
-  constructor(public resetService: ResetPasswordService, private router: Router, private route: ActivatedRoute, public app: AppComponent) {
+  constructor(
+    public resetService: ResetPasswordService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public app: AppComponent,
+  ) {
     this.form = new FormGroup({
       customerEmail: new FormControl(' ', {
         validators: [Validators.required, Validators.email],
@@ -59,7 +64,9 @@ export class ForgotPasswordComponent implements OnInit {
     if (this.form.invalid) {
       this.enableFormFields();
     } else {
-      const res: any = await this.resetService.forgotPassword(this.form.value.customerEmail).toPromise();
+      const res: any = await this.resetService
+        .forgotPassword(this.form.value.customerEmail)
+        .toPromise();
       if (res) {
         this.enableFormFields();
       }

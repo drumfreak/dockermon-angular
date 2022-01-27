@@ -10,7 +10,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtInterceptor } from './JWTInterceptor';
 import { ErrorInterceptor } from './modules/error/error.interceptor';
 import { PrimengStuffModule } from './modules/primeng-stuff/primeng-stuff.module';
-import { AppMainComponent } from './app-main/app-main.component';
 import { AppNavigationModule } from './modules/app-navigation/app-navigation.module';
 import { AppPagesModule } from './modules/app-pages/app-pages.module';
 import { AuthGuard } from './auth.guard';
@@ -18,6 +17,10 @@ import { ThemeModule } from './modules/theme/theme.module';
 import { ChartColors } from './modules/velocity/chart-colors';
 import { AppMainModule } from './app-main/app-main.module';
 import { AppDashboardModule } from './dashboards/app-dashboard/app-dashboard.module';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { WebSocketService } from './services/websocket.service';
+
+const config: SocketIoConfig = { url: 'http://localhost:3810', options: {} };
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +31,7 @@ import { AppDashboardModule } from './dashboards/app-dashboard/app-dashboard.mod
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    SocketIoModule.forRoot(config),
     PrimengStuffModule,
     AppMainModule,
     ThemeModule,
@@ -41,6 +45,7 @@ import { AppDashboardModule } from './dashboards/app-dashboard/app-dashboard.mod
     AuthGuard,
     AppComponent,
     ChartColors,
+    WebSocketService,
   ],
   bootstrap: [AppComponent],
 })

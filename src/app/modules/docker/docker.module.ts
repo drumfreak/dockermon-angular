@@ -9,9 +9,16 @@ import { DockerCpuLineChartComponent } from './charts/docker-cpu-line-chart/dock
 import { DockerProcessesBarChartComponent } from './charts/docker-processes-bar-chart/docker-processes-bar-chart.component';
 import { DockerMemoryLineChartComponent } from './charts/docker-memory-line-chart/docker-memory-line-chart.component';
 import { DockerNetworkLineChartComponent } from './charts/docker-network-line-chart/docker-network-line-chart.component';
+import { WebSocketService } from 'src/app/services/websocket.service';
 @NgModule({
   imports: [CommonModule, AppNavigationModule, PrimengStuffModule, ThemeModule],
-  declarations: [DockerComponent, DockerCpuLineChartComponent, DockerNetworkLineChartComponent, DockerProcessesBarChartComponent, DockerMemoryLineChartComponent],
-  providers: [DockerService]
+  declarations: [
+    DockerComponent,
+    DockerCpuLineChartComponent,
+    DockerNetworkLineChartComponent,
+    DockerProcessesBarChartComponent,
+    DockerMemoryLineChartComponent,
+  ],
+  providers: [DockerService, WebSocketService],
 })
-export class DockerModule { }
+export class DockerModule {}
