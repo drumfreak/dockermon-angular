@@ -1,13 +1,19 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { UIChart } from 'primeng/chart';
 
 @Component({
   selector: 'app-docker-cpu-line-chart',
   templateUrl: './docker-cpu-line-chart.component.html',
-  styleUrls: ['./docker-cpu-line-chart.component.css']
+  styleUrls: ['./docker-cpu-line-chart.component.css'],
 })
 export class DockerCpuLineChartComponent implements OnInit, AfterViewInit {
-
   @Input() container: any;
   @Input() mode = 'Points';
   @Input() cpuData: any;
@@ -19,12 +25,13 @@ export class DockerCpuLineChartComponent implements OnInit, AfterViewInit {
   stackedOptions: any;
   horizontalOptions: any;
   isLoading = true;
-  @ViewChild('chart1', { static: false }) chart1ViewChild: UIChart = {} as UIChart;
+  @ViewChild('chart1', { static: false }) chart1ViewChild: UIChart =
+    {} as UIChart;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-   if (this.isLoading) {
+    if (this.isLoading) {
       this.updateChart();
     }
   }
@@ -39,40 +46,13 @@ export class DockerCpuLineChartComponent implements OnInit, AfterViewInit {
           backgroundColor: '#cc0000',
           fill: true,
           hoverBackgroundColor: '#3380FF',
+          lineTension: 0,
         },
       ],
     };
 
-    this.horizontalOptions = {
-      indexAxis: 'y',
-      plugins: {
-        legend: {
-          labels: {
-            color: '#495057',
-          },
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: '#495057',
-          },
-          grid: {
-            color: '#ebedef',
-          },
-        },
-        y: {
-          ticks: {
-            color: '#495057',
-          },
-          grid: {
-            color: '#ebedef',
-          },
-        },
-      },
-    };
-
     this.updateChartOptions();
+
     if (this.chart1ViewChild) {
       if (this.chart1ViewChild.chart) {
         // console.log('Updating Chart', this.cpuData);
@@ -108,23 +88,21 @@ export class DockerCpuLineChartComponent implements OnInit, AfterViewInit {
       },
       scales: {
         x: {
+          type: 'timeseries',
           ticks: {
             color: '#ebedef',
           },
           grid: {
             color: 'rgba(255,255,255,0.2)',
           },
-          min: 0.0,
-          max: 2.0,
-          type: 'time',
           time: {
             // Luxon format string
-            tooltipFormat: 'DD T'
+            tooltipFormat: 'DD T',
           },
           title: {
             display: true,
-            text: 'Date'
-          }
+            text: 'Date',
+          },
         },
 
         y: {
@@ -135,7 +113,7 @@ export class DockerCpuLineChartComponent implements OnInit, AfterViewInit {
             color: 'rgba(255,255,255,0.2)',
           },
           min: 0.0,
-          max: 2.0
+          max: 2.0,
         },
       },
     };
@@ -143,23 +121,42 @@ export class DockerCpuLineChartComponent implements OnInit, AfterViewInit {
 
   getDarkTheme() {
     return {
-      plugins: {
-        legend: {
-          labels: {
-            color: '#ebedef',
-          },
+      responsive: true,
+      elements: {
+        point: {
+          radius: 0,
         },
       },
       scales: {
         x: {
           ticks: {
             color: '#ebedef',
+            autoSkip: true,
           },
           grid: {
             color: 'rgba(255,255,255,0.2)',
           },
-          min: 0.0,
-          max: 2.0,
+        },
+        y: {
+          ticks: {
+            color: '#ebedef',
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.2)',
+          },
+        },
+      },
+    };
+    return {
+      scales: {
+        x: {
+          type: 'time',
+          ticks: {
+            color: '#ebedef',
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.2)',
+          },
         },
         y: {
           ticks: {
@@ -169,7 +166,7 @@ export class DockerCpuLineChartComponent implements OnInit, AfterViewInit {
             color: 'rgba(255,255,255,0.2)',
           },
           min: 0.0,
-          max: 2.0
+          max: 2.0,
         },
       },
     };

@@ -1,4 +1,10 @@
-import { Component, AfterViewInit, Renderer2, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  Renderer2,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { MenuService } from './app.menu.service';
 import { PrimeNGConfig } from 'primeng/api';
 import { AppComponent } from '../app.component';
@@ -11,11 +17,8 @@ import { Router } from '@angular/router';
 })
 export class AppMainComponent implements AfterViewInit, OnInit, OnDestroy {
   topbarMenuActive: boolean = false;
-
   menuActive: boolean = false;
-
   staticMenuDesktopInactive: boolean = false;
-
   mobileMenuActive: boolean = false;
 
   menuClick: boolean = false;
@@ -53,7 +56,7 @@ export class AppMainComponent implements AfterViewInit, OnInit, OnDestroy {
     private menuService: MenuService,
     private primengConfig: PrimeNGConfig,
     public app: AppComponent,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -93,7 +96,10 @@ export class AppMainComponent implements AfterViewInit, OnInit, OnDestroy {
         this.search = false;
       }
 
-      if (this.inlineMenuActive[this.currentInlineMenuKey] && !this.inlineMenuClick) {
+      if (
+        this.inlineMenuActive[this.currentInlineMenuKey] &&
+        !this.inlineMenuClick
+      ) {
         this.inlineMenuActive[this.currentInlineMenuKey] = false;
       }
 
@@ -139,7 +145,10 @@ export class AppMainComponent implements AfterViewInit, OnInit, OnDestroy {
   onMenuClick($event: any) {
     this.menuClick = true;
 
-    if (this.inlineMenuActive[this.currentInlineMenuKey] && !this.inlineMenuClick) {
+    if (
+      this.inlineMenuActive[this.currentInlineMenuKey] &&
+      !this.inlineMenuClick
+    ) {
       this.inlineMenuActive[this.currentInlineMenuKey] = false;
     }
   }
@@ -234,7 +243,13 @@ export class AppMainComponent implements AfterViewInit, OnInit, OnDestroy {
     if (document.body.classList) {
       document.body.classList.remove('blocked-scroll');
     } else {
-      document.body.className = document.body.className.replace(new RegExp('(^|\\b)' + 'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      document.body.className = document.body.className.replace(
+        new RegExp(
+          '(^|\\b)' + 'blocked-scroll'.split(' ').join('|') + '(\\b|$)',
+          'gi',
+        ),
+        ' ',
+      );
     }
   }
 

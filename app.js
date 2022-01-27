@@ -13,7 +13,7 @@ app.use((req, res, next) => {
   res.sendFile(path.join(__dirname, angularPath, 'index.html'));
 });
 
-var port = normalizePort(process.env.PORT || '3005');
+var port = normalizePort(process.env.PORT || '3800');
 app.set('port', port);
 
 /**
@@ -30,6 +30,7 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+console.log('node app running on http://localhost:' + port);
 /**
  * Normalize a port into a number, string, or false.
  */

@@ -1,12 +1,19 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { UIChart } from 'primeng/chart';
 
 @Component({
   selector: 'app-docker-memory-line-chart',
   templateUrl: './docker-memory-line-chart.component.html',
-  styleUrls: ['./docker-memory-line-chart.component.css']
+  styleUrls: ['./docker-memory-line-chart.component.css'],
 })
-export class DockerMemoryLineChartComponent implements OnInit,AfterViewInit {
+export class DockerMemoryLineChartComponent implements OnInit, AfterViewInit {
   @Input() container: any;
   @Input() mode = 'Points';
   @Input() chartData: any;
@@ -20,15 +27,16 @@ export class DockerMemoryLineChartComponent implements OnInit,AfterViewInit {
   isLoading = true;
   @ViewChild('chart1') chart1ViewChild: UIChart = {} as UIChart;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     if (this.isLoading) {
-       this.updateChart();
-     }
-   }
+      this.updateChart();
+    }
+  }
 
   updateChart() {
+    this.updateChartOptions();
     this.data = {
       labels: this.dateData,
       datasets: [
@@ -43,36 +51,6 @@ export class DockerMemoryLineChartComponent implements OnInit,AfterViewInit {
       ],
     };
 
-    this.horizontalOptions = {
-      indexAxis: 'y',
-      plugins: {
-        legend: {
-          labels: {
-            color: '#495057',
-          },
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: '#495057',
-          },
-          grid: {
-            color: '#ebedef',
-          },
-        },
-        y: {
-          ticks: {
-            color: '#495057',
-          },
-          grid: {
-            color: '#ebedef',
-          },
-        },
-      },
-    };
-
-    this.updateChartOptions();
     if (this.chart1ViewChild) {
       if (this.chart1ViewChild.chart) {
         // console.log('Update Memory Chart')
@@ -82,15 +60,7 @@ export class DockerMemoryLineChartComponent implements OnInit,AfterViewInit {
     this.isLoading = false;
   }
 
-  ngAfterViewInit() {
-    // this.isLoading = false;
-    // if (this.chart1ViewChild) {
-    //   if (this.chart1ViewChild.chart) {
-    //     console.log('Update Chart')
-    //     this.chart1ViewChild.chart.update();
-    //   }
-    // }
-  }
+  ngAfterViewInit() {}
 
   updateChartOptions() {
     this.chartOptions = this.getDarkTheme();
@@ -105,60 +75,27 @@ export class DockerMemoryLineChartComponent implements OnInit,AfterViewInit {
           },
         },
       },
-      scales: {
-        x: {
-          ticks: {
-            color: '#ebedef',
-          },
-          grid: {
-            color: 'rgba(255,255,255,0.2)',
-          },
-          min: 0.0,
-          max: 2.0,
-          type: 'time',
-          time: {
-            // Luxon format string
-            tooltipFormat: 'DD T'
-          },
-          title: {
-            display: true,
-            text: 'Date'
-          }
-        },
-
-        y: {
-          ticks: {
-            color: '#ebedef',
-          },
-          grid: {
-            color: 'rgba(255,255,255,0.2)',
-          },
-          min: 0.0,
-          max: 2.0
-        },
-      },
+      scales: {},
     };
   }
 
   getDarkTheme() {
     return {
-      plugins: {
-        legend: {
-          labels: {
-            color: '#ebedef',
-          },
+      responsive: true,
+      elements: {
+        point: {
+          radius: 0,
         },
       },
       scales: {
         x: {
           ticks: {
             color: '#ebedef',
+            autoSkip: true,
           },
           grid: {
             color: 'rgba(255,255,255,0.2)',
           },
-          min: 0.0,
-          max: 2.0,
         },
         y: {
           ticks: {
@@ -167,8 +104,6 @@ export class DockerMemoryLineChartComponent implements OnInit,AfterViewInit {
           grid: {
             color: 'rgba(255,255,255,0.2)',
           },
-          min: 0.0,
-          max: 2.0
         },
       },
     };

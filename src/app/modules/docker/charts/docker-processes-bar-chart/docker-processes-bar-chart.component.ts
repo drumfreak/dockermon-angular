@@ -1,10 +1,17 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { UIChart } from 'primeng/chart';
 
 @Component({
   selector: 'app-docker-processes-bar-chart',
   templateUrl: './docker-processes-bar-chart.component.html',
-  styleUrls: ['./docker-processes-bar-chart.component.css']
+  styleUrls: ['./docker-processes-bar-chart.component.css'],
 })
 export class DockerProcessesBarChartComponent implements OnInit, AfterViewInit {
   @Input() container: any;
@@ -20,7 +27,7 @@ export class DockerProcessesBarChartComponent implements OnInit, AfterViewInit {
   isLoading = true;
   @ViewChild('chart1') chart1ViewChild: UIChart = {} as UIChart;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     if (this.isLoading) {
@@ -40,35 +47,6 @@ export class DockerProcessesBarChartComponent implements OnInit, AfterViewInit {
           hoverBackgroundColor: '#3380FF',
         },
       ],
-    };
-
-    this.horizontalOptions = {
-      indexAxis: 'y',
-      plugins: {
-        legend: {
-          labels: {
-            color: '#495057',
-          },
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: '#495057',
-          },
-          grid: {
-            color: '#ebedef',
-          },
-        },
-        y: {
-          ticks: {
-            color: '#495057',
-          },
-          grid: {
-            color: '#ebedef',
-          },
-        },
-      },
     };
 
     this.updateChartOptions();
@@ -118,39 +96,15 @@ export class DockerProcessesBarChartComponent implements OnInit, AfterViewInit {
           type: 'time',
           time: {
             // Luxon format string
-            tooltipFormat: 'DD T'
+            tooltipFormat: 'DD T',
           },
           title: {
             display: true,
-            text: 'Date'
-          }
+            text: 'Date',
+          },
         },
 
         y: {
-          ticks: {
-            color: '#ebedef',
-          },
-          grid: {
-            color: 'rgba(255,255,255,0.2)',
-          },
-          min: 0.0,
-          max: 2.0
-        },
-      },
-    };
-  }
-
-  getDarkTheme() {
-    return {
-      plugins: {
-        legend: {
-          labels: {
-            color: '#ebedef',
-          },
-        },
-      },
-      scales: {
-        x: {
           ticks: {
             color: '#ebedef',
           },
@@ -160,6 +114,28 @@ export class DockerProcessesBarChartComponent implements OnInit, AfterViewInit {
           min: 0.0,
           max: 2.0,
         },
+      },
+    };
+  }
+
+  getDarkTheme() {
+    return {
+      responsive: true,
+      elements: {
+        point: {
+          radius: 0,
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#ebedef',
+            autoSkip: true,
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.2)',
+          },
+        },
         y: {
           ticks: {
             color: '#ebedef',
@@ -167,8 +143,6 @@ export class DockerProcessesBarChartComponent implements OnInit, AfterViewInit {
           grid: {
             color: 'rgba(255,255,255,0.2)',
           },
-          min: 0.0,
-          max: 2.0
         },
       },
     };

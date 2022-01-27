@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DockerService } from './docker.service';
-import { formatDate } from "@angular/common";
-import { LOCALE_ID } from "@angular/core";
+import { formatDate } from '@angular/common';
+import { LOCALE_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Subject, Subscription } from 'rxjs';
 import { DockerCpuLineChartComponent } from './charts/docker-cpu-line-chart/docker-cpu-line-chart.component';
@@ -12,7 +12,7 @@ import { DockerNetworkLineChartComponent } from './charts/docker-network-line-ch
 @Component({
   selector: 'app-docker',
   templateUrl: './docker.component.html',
-  styleUrls: ['./docker.component.css']
+  styleUrls: ['./docker.component.css'],
 })
 export class DockerComponent implements OnInit, OnDestroy {
   containers: any = [];
@@ -34,10 +34,14 @@ export class DockerComponent implements OnInit, OnDestroy {
   refresh = false;
   timerSubscription: Subscription = new Subscription();
 
-  @ViewChild('cpuChart') cpuChartViewChild: DockerCpuLineChartComponent = {} as DockerCpuLineChartComponent;
-  @ViewChild('memoryChart') memoryChartViewChild: DockerMemoryLineChartComponent = {} as DockerMemoryLineChartComponent;
-  @ViewChild('processesChart') processesChartViewChild: DockerProcessesBarChartComponent = {} as DockerProcessesBarChartComponent;
-  @ViewChild('networkChart') networkChartViewChild: DockerNetworkLineChartComponent = {} as DockerNetworkLineChartComponent;
+  @ViewChild('cpuChart') cpuChartViewChild: DockerCpuLineChartComponent =
+    {} as DockerCpuLineChartComponent;
+  @ViewChild('memoryChart')
+  memoryChartViewChild: DockerMemoryLineChartComponent = {} as DockerMemoryLineChartComponent;
+  @ViewChild('processesChart')
+  processesChartViewChild: DockerProcessesBarChartComponent = {} as DockerProcessesBarChartComponent;
+  @ViewChild('networkChart')
+  networkChartViewChild: DockerNetworkLineChartComponent = {} as DockerNetworkLineChartComponent;
 
   isLoading = true;
   public localID: string;
@@ -46,7 +50,7 @@ export class DockerComponent implements OnInit, OnDestroy {
     @Inject(LOCALE_ID) localID: string,
     private dockerService: DockerService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.localID = localID;
   }
@@ -61,8 +65,8 @@ export class DockerComponent implements OnInit, OnDestroy {
           id: a.id,
           name: a.name,
           containerId: a.containerId,
-          running: a.running
-        }
+          running: a.running,
+        };
       });
     }
 
@@ -70,12 +74,16 @@ export class DockerComponent implements OnInit, OnDestroy {
       this.queryParams = queryParams;
       if (queryParams.containerId) {
         // console.log('queryPAramChanged', queryParams);
-        const c = containers.filter((a: any) => Number(a.id) === Number(queryParams.containerId));
+        const c = containers.filter(
+          (a: any) => Number(a.id) === Number(queryParams.containerId),
+        );
         if (c && c.length > 0) {
           this.selectedContainer = c[0];
           this.containers = containers;
           // console.log('SelectedContainer', this.selectedContainer);
-          const c1 = this.containersOriginal.filter((a: any) => Number(a.id) === Number(queryParams.containerId));
+          const c1 = this.containersOriginal.filter(
+            (a: any) => Number(a.id) === Number(queryParams.containerId),
+          );
           if (c1 && c1.length > 0) {
             this.containerDetails = c1[0].details;
           }
@@ -95,21 +103,24 @@ export class DockerComponent implements OnInit, OnDestroy {
 
   async getContainerStats() {
     this.isLoading = true;
-    const r2 = await this.dockerService.getStats({
-      limit: 100,
-      containerId: this.selectedContainer.id,
-      sortKey: 'createdAt',
-      sortType: 'DESC',
-      activeFilters: [
-        {
-          filterOperator: 'eq',
-          filterKey: 'containerId',
-          filterValue: this.selectedContainer.id,
-        }]
-    }).toPromise();
-    console.log('r2', r2);
+    const r2 = await this.dockerService
+      .getStats({
+        limit: 100,
+        containerId: this.selectedContainer.id,
+        sortKey: 'createdAt',
+        sortType: 'DESC',
+        activeFilters: [
+          {
+            filterOperator: 'eq',
+            filterKey: 'containerId',
+            filterValue: this.selectedContainer.id,
+          },
+        ],
+      })
+      .toPromise();
+    // console.log('r2', r2);
     if (r2.status === 'success') {
-      console.log('Stats', r2.data);
+      // console.log('Stats', r2.data);
       this.stats = r2.data;
       if (this.stats.length > 0) {
         this.lastStats = this.stats[this.stats.length - 1];
@@ -122,16 +133,16 @@ export class DockerComponent implements OnInit, OnDestroy {
       this.statsNetworkOut = [];
       this.statsDates = [];
 
-      this.stats.reverse().map((a: any) => {
-        this.statsCPU.push(a.cpu);
-        this.statsProcesses.push(a.pids);
-        this.statsMemory.push(a.memory / 10000);
-        this.statsMemoryPercent.push(a.memoryPercent);
-        this.statsNetworkIn.push(a.networkIn / 10000);
-        this.statsNetworkOut.push(a.networiOut / 10000);
-        this.statsDates.push(formatDate(a.createdAt, 'short', this.localID))
+      this.stats.map((a: any) => {
+        const date = formatDate(new Date(a.createdAt), 'short', this.localID);
+        this.statsCPU.push({ x: date, y: a.cpu });
+        this.statsProcesses.push({ x: date, y: a.pids });
+        this.statsMemory.push({ x: date, y: a.memory / 10000 });
+        this.statsMemoryPercent.push({ x: date, y: a.memoryPercent });
+        this.statsNetworkIn.push({ x: date, y: a.networkIn / 10000 });
+        this.statsNetworkOut.push({ x: date, y: a.networiOut / 10000 });
+        this.statsDates.push(date);
       });
-      // console.log(this.statsCPU);
     }
     this.isLoading = false;
     setTimeout(() => {
@@ -144,10 +155,12 @@ export class DockerComponent implements OnInit, OnDestroy {
 
   selectContainer(event: any) {
     if (!this.isLoading) {
-      console.log('selectContainer Event', event);
+      // console.log('selectContainer Event', event);
       this.stopTimer();
       this.selectedContainer = event.value;
-      this.router.navigate(['/'], { queryParams: { containerId: this.selectedContainer.id } });
+      this.router.navigate(['/'], {
+        queryParams: { containerId: this.selectedContainer.id },
+      });
     }
   }
 
@@ -156,11 +169,9 @@ export class DockerComponent implements OnInit, OnDestroy {
     if (this.refresh) {
       const timerInterval = interval(15 * 1000);
       // console.warn('Subscribing to timer ', timerName);
-      this.timerSubscription = timerInterval.subscribe(
-        (val) => {
-          this.getContainerStats();
-        }
-      );
+      this.timerSubscription = timerInterval.subscribe((val) => {
+        this.getContainerStats();
+      });
     }
   }
 

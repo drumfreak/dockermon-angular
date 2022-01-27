@@ -1,13 +1,19 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { UIChart } from 'primeng/chart';
 
 @Component({
   selector: 'app-docker-network-line-chart',
   templateUrl: './docker-network-line-chart.component.html',
-  styleUrls: ['./docker-network-line-chart.component.css']
+  styleUrls: ['./docker-network-line-chart.component.css'],
 })
 export class DockerNetworkLineChartComponent implements OnInit, AfterViewInit {
-
   @Input() container: any;
   @Input() mode = 'Points';
   @Input() chartData1: any;
@@ -22,7 +28,7 @@ export class DockerNetworkLineChartComponent implements OnInit, AfterViewInit {
   isLoading = true;
   @ViewChild('chart1') chart1ViewChild: UIChart = {} as UIChart;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     if (this.isLoading) {
@@ -86,7 +92,7 @@ export class DockerNetworkLineChartComponent implements OnInit, AfterViewInit {
 
     if (this.chart1ViewChild) {
       if (this.chart1ViewChild.chart) {
-        console.log('Update Network Chart')
+        // console.log('Update Network Chart');
         this.chart1ViewChild.chart.update();
       }
     }
@@ -129,12 +135,12 @@ export class DockerNetworkLineChartComponent implements OnInit, AfterViewInit {
           type: 'time',
           time: {
             // Luxon format string
-            tooltipFormat: 'DD T'
+            tooltipFormat: 'DD T',
           },
           title: {
             display: true,
-            text: 'Date'
-          }
+            text: 'Date',
+          },
         },
 
         y: {
@@ -145,7 +151,7 @@ export class DockerNetworkLineChartComponent implements OnInit, AfterViewInit {
             color: 'rgba(255,255,255,0.2)',
           },
           min: 0.0,
-          max: 2.0
+          max: 2.0,
         },
       },
     };
@@ -153,10 +159,28 @@ export class DockerNetworkLineChartComponent implements OnInit, AfterViewInit {
 
   getDarkTheme() {
     return {
-      plugins: {
-        legend: {
-          labels: {
+      responsive: true,
+      elements: {
+        point: {
+          radius: 0,
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
             color: '#ebedef',
+            autoSkip: true,
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.2)',
+          },
+        },
+        y: {
+          ticks: {
+            color: '#ebedef',
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.2)',
           },
         },
       },

@@ -12,8 +12,7 @@
       ></p-dropdown>
       <p-dropdown
         *ngIf="isLoading"
-        style="width:350px"
-        [options]="[ { name: 'Loading...           ' } ]"
+        [options]="[{ name: 'Loading...           ' }]"
         styleClass="navigationDropdown"
         optionLabel="name"
       ></p-dropdown>
@@ -37,7 +36,10 @@
     <div class="flex justify-content-center flex-wrap card-container green-300">
       <div class="col-3 sm:col-3 mb-2 px-5">
         <a routerLink="/" style="cursor: pointer green-300">
-          <span class="p-3 col-6 shadow-3 mb-3 inline-block surface-card" style="border-radius: 10px">
+          <span
+            class="p-3 col-6 shadow-3 mb-3 inline-block surface-card"
+            style="border-radius: 10px"
+          >
             <i class="fa fa-microchip text-4xl text-green-500"></i>
             <h5>{{ lastStats.cpu | number }}%<br /></h5>
             <div class="text-900 mb-3 font-medium">CPU</div>
@@ -46,10 +48,14 @@
       </div>
       <div class="col-3 sm:col-3 mb-2 px-5">
         <a routerLink="/" style="cursor: pointer green-300">
-          <span class="p-3 col-6 shadow-3 mb-3 inline-block surface-card" style="border-radius: 10px">
+          <span
+            class="p-3 col-6 shadow-3 mb-3 inline-block surface-card"
+            style="border-radius: 10px"
+          >
             <i class="fa fa-memory text-4xl text-green-500"></i>
             <h5>
-              {{ lastStats.memory * 0.000000001 | number }} of {{ lastStats.memoryLimit * 0.000000001 | number }} GB<br />
+              {{ lastStats.memory * 0.000000001 | number }} of
+              {{ lastStats.memoryLimit * 0.000000001 | number }} GB<br />
               {{ lastStats.memoryPercent }}%
             </h5>
             <div class="text-900 mb-3 font-medium">Memory</div>
@@ -58,7 +64,10 @@
       </div>
       <div class="col-3 sm:col-3 mb-2 px-5">
         <a routerLink="/" style="cursor: pointer green-300">
-          <span class="p-3 col-6 shadow-3 mb-1 inline-block surface-card" style="border-radius: 10px">
+          <span
+            class="p-3 col-6 shadow-3 mb-1 inline-block surface-card"
+            style="border-radius: 10px"
+          >
             <i class="fa fa-save text-4xl text-green-500"></i>
             <h5>
               {{ lastStats.blockRead * 0.000001 | number }} MB Read <br />
@@ -71,7 +80,10 @@
 
       <div class="col-3 sm:col-3 mb-2 px-5">
         <a routerLink="/" style="cursor: pointer green-300">
-          <span class="p-3 col-6 shadow-3 mb-1 inline-block surface-card" style="border-radius: 10px">
+          <span
+            class="p-3 col-6 shadow-3 mb-1 inline-block surface-card"
+            style="border-radius: 10px"
+          >
             <i class="fa fa-network-wired text-4xl text-green-500"></i>
             <h5>
               {{ lastStats.networkIn * 0.000001 | number }} MB In <br />
@@ -84,16 +96,31 @@
     </div>
   </div>
 </p-card>
-<app-code-highlighter *ngIf="!isLoading" [code]="containerDetails"></app-code-highlighter>
+<app-code-highlighter
+  *ngIf="!isLoading"
+  [code]="containerDetails"
+></app-code-highlighter>
 <p-card>
   <div class="grid surface-section p-3">
     <div class="col-6">
-      <app-docker-cpu-line-chart #cpuChart [cpuData]="statsCPU" [dateData]="statsDates"></app-docker-cpu-line-chart>
+      <app-docker-cpu-line-chart
+        #cpuChart
+        [cpuData]="statsCPU"
+        [dateData]="statsDates"
+      ></app-docker-cpu-line-chart>
       <div class="col-12 mt-1"></div>
-      <app-docker-processes-bar-chart #processesChart [chartData]="statsProcesses" [dateData]="statsDates"></app-docker-processes-bar-chart>
+      <app-docker-processes-bar-chart
+        #processesChart
+        [chartData]="statsProcesses"
+        [dateData]="statsDates"
+      ></app-docker-processes-bar-chart>
     </div>
     <div class="col-6">
-      <app-docker-memory-line-chart #memoryChart [chartData]="statsMemory" [dateData]="statsDates"></app-docker-memory-line-chart>
+      <app-docker-memory-line-chart
+        #memoryChart
+        [chartData]="statsMemory"
+        [dateData]="statsDates"
+      ></app-docker-memory-line-chart>
       <div class="col-12 mt-1"></div>
       <app-docker-network-line-chart
         #networkChart

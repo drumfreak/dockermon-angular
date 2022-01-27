@@ -1,4 +1,9 @@
-
 <p-panel header="Memory Usage" [toggleable]="true" styleClass="shadow-12">
-  <p-chart #chart1 type="line" [data]="data" height="300"></p-chart>
+  <p-chart
+    #chart1
+    type="line"
+    [data]="data"
+    [options]="chartOptions"
+    height="300"
+  ></p-chart>
 </p-panel>

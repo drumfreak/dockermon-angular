@@ -21,19 +21,25 @@ const routes: Routes = [
       },
       {
         path: 'admin',
-        loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule),
+        loadChildren: () =>
+          import('./modules/admin/admin.module').then((m) => m.AdminModule),
       },
       {
         path: 'docker',
-        loadChildren: () => import('./modules/docker/docker.module').then((m) => m.DockerModule),
+        loadChildren: () =>
+          import('./modules/docker/docker.module').then((m) => m.DockerModule),
       },
       {
         path: 'search',
-        loadChildren: () => import('./modules/search/search.module').then((m) => m.SearchModule),
+        loadChildren: () =>
+          import('./modules/search/search.module').then((m) => m.SearchModule),
       },
       {
         path: 'logs',
-        loadChildren: () => import('./modules/activitylogs/activitylogs.module').then((m) => m.ActivitylogsModule),
+        loadChildren: () =>
+          import('./modules/activitylogs/activitylogs.module').then(
+            (m) => m.ActivitylogsModule,
+          ),
       },
     ],
   },
@@ -57,7 +63,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
+  imports: [
+    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
+  ],
   exports: [RouterModule],
   providers: [],
   declarations: [],
