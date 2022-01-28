@@ -1,5 +1,7 @@
+/* eslint-disable prettier/prettier */
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from '../app.component';
+import { DockerService } from '../modules/docker/docker.service';
 
 @Component({
   selector: 'app-menu',
@@ -8,42 +10,84 @@ import { AppComponent } from '../app.component';
 export class AppMenuComponent implements OnInit {
   model: any = [];
 
-  constructor(public app: AppComponent) {}
+  constructor(public app: AppComponent, private dockerService: DockerService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.model = [
       {
         label: 'Home',
         icon: 'fa fa-fw fa-home',
         routerLink: ['/'],
       },
-      // {
-      //   label: 'Projects',
-      //   icon: 'fa fa-fw fa-briefcase',
-      //   // routerLink: ['/projects'],
-      //   items: [
-      //     {
-      //       label: 'View Projects',
-      //       icon: 'fa fa-fw fa-briefcase',
-      //       routerLink: ['/projects'],
-      //     },
-      //     {
-      //       label: 'Add Projects',
-      //       icon: 'fa fa-fw fa-plus',
-      //       routerLink: ['/projects/add'],
-      //     },
-      //     {
-      //       label: 'View Stages',
-      //       icon: 'fa fa-fw fa-briefcase',
-      //       routerLink: ['/stages'],
-      //     },
-      //     {
-      //       label: 'Add Stages',
-      //       icon: 'fa fa-fw fa-plus',
-      //       routerLink: ['/stages/add'],
-      //     },
-      //   ],
-      // },
+    ];
+
+    const projects: any = [];
+    const r: any = await this.dockerService.getContainersPaginated({ limit: 100 }).toPromise();
+    if (r.status === 'success') {
+      if (r.data.length > 0) {
+        r.data.filter(function (item:any) {
+          const i = projects.findIndex((x:any) => x.projects == item.projects);
+          if (i <= -1) {
+            const p: any = { name: item.project };
+            p.containers = r.data.filter((a:any) => a.project === item.project);
+            projects.push(p);
+          }
+          return null;
+        });
+      }
+    }
+
+    projects.forEach((p: any) => {
+
+      const project: any = {
+        label: p.name,
+        icon: 'fa fa-fw fa-briefcase',
+        items: []
+      }
+      p.containers.forEach((c: any) => {
+        const item = {
+          label: c.name,
+          icon: 'fa fa-fw fa-briefcase',
+          routerLink: ['/docker/containers', c.id],
+        };
+        project.items.push(item);
+      });
+      this.model.push(project);
+    });
+
+    // this.model = [
+    //   {
+    //     label: 'Home',
+    //     icon: 'fa fa-fw fa-home',
+    //     routerLink: ['/'],
+    //   },
+    //   {
+    //     label: 'Projects',
+    //     icon: 'fa fa-fw fa-briefcase',
+    //     // routerLink: ['/projects'],
+    //     items: [
+    //       {
+    //         label: 'View Projects',
+    //         icon: 'fa fa-fw fa-briefcase',
+    //         routerLink: ['/projects'],
+    //       },
+    //       {
+    //         label: 'Add Projects',
+    //         icon: 'fa fa-fw fa-plus',
+    //         routerLink: ['/projects/add'],
+    //       },
+    //       {
+    //         label: 'View Stages',
+    //         icon: 'fa fa-fw fa-briefcase',
+    //         routerLink: ['/stages'],
+    //       },
+    //       {
+    //         label: 'Add Stages',
+    //         icon: 'fa fa-fw fa-plus',
+    //         routerLink: ['/stages/add'],
+    //       },
+    //     ],
+    //   },
       // {
       //   label: 'Teams',
       //   icon: 'fa fa-fw fa-users',
@@ -111,7 +155,7 @@ export class AppMenuComponent implements OnInit {
       //     },
       //   ],
       // },
-    ];
+    // ];
 
     if (this.app.user && this.app.user.role) {
       if (this.app.user.role.name == 'Admin') {

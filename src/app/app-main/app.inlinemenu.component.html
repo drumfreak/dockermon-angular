@@ -12,9 +12,9 @@
     pTooltip="Amy Elsner"
     [tooltipDisabled]="isTooltipDisabled"
   >
-    <span class="flex flex-column" [ngClass]="{ 'ml-2': !app.isRTL, 'mr-2': app.isRTL }">
+    <span *ngIf="app.user" class="flex flex-column" [ngClass]="{ 'ml-2': !app.isRTL, 'mr-2': app.isRTL }">
       <span class="font-bold">{{ app.user.firstName }} {{ app.user.lastName }} </span>
-      <small>{{ app.user.role.name }}</small>
+      <!-- <small>{{ app.user.role.name }}</small> -->
     </span>
     <i class="layout-inline-menu-icon pi pi-angle-down" [ngClass]="{ 'ml-auto': !app.isRTL, 'mr-auto': app.isRTL }"></i>
   </a>

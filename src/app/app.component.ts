@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { LoginService } from './services/login.service';
 
 @Component({
@@ -12,7 +11,7 @@ export class AppComponent implements OnInit {
   topbarTheme: string = 'blue';
   menuTheme: string = 'dark';
   layoutMode: string = 'dark';
-  menuMode: string = 'horizontal';
+  menuMode: string = 'static';
   inlineMenuPosition: string = 'top';
   inputStyle: string = 'outlined';
   ripple: boolean = true;

@@ -10,14 +10,19 @@ import { DockerProcessesBarChartComponent } from './charts/docker-processes-bar-
 import { DockerMemoryLineChartComponent } from './charts/docker-memory-line-chart/docker-memory-line-chart.component';
 import { DockerNetworkLineChartComponent } from './charts/docker-network-line-chart/docker-network-line-chart.component';
 import { WebSocketService } from 'src/app/services/websocket.service';
+import { DockerRoutes } from './docker.routing';
+import { ViewContainerComponent } from './containers/view-container/view-container.component';
+import { ViewContainersComponent } from './containers/view-containers/view-containers.component';
 @NgModule({
-  imports: [CommonModule, AppNavigationModule, PrimengStuffModule, ThemeModule],
+  imports: [CommonModule, AppNavigationModule, PrimengStuffModule, ThemeModule, DockerRoutes],
   declarations: [
     DockerComponent,
     DockerCpuLineChartComponent,
     DockerNetworkLineChartComponent,
     DockerProcessesBarChartComponent,
     DockerMemoryLineChartComponent,
+    ViewContainerComponent,
+    ViewContainersComponent,
   ],
   providers: [DockerService, WebSocketService],
 })

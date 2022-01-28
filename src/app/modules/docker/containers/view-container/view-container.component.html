@@ -1,0 +1,72 @@
+<p-panel>
+  <p-card>
+    <div class="surface-area">
+      <h2>{{ (container && container.project) ? container.project + ' > ': ''}}{{ container ? container.name : 'Loading...' }}</h2>
+      <div class="grid col-12 text-center">
+        <div class="ml-auto mr-auto">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Pause Container"
+            class="p-button-help"
+            (click)="pauseContainer()"
+          ></button>
+        </div>
+        <div class="ml-auto mr-auto">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Resume Container"
+            class="p-button-help"
+            (click)="unpauseContainer()"
+          ></button>
+        </div>
+        <div class="ml-auto mr-auto">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Inspect Container"
+            class="p-button-raised p-button-info"
+            (click)="inspectContainer()"
+          ></button>
+        </div>
+        <div class="ml-auto mr-auto">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Stop Container"
+            class="p-button-danger"
+            (click)="stopContainer()"
+          ></button>
+        </div>
+        <div class="ml-auto mr-auto">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Start Container"
+            class="p-button-success"
+            (click)="startContainer()"
+          ></button>
+        </div>
+        <div class="ml-auto mr-auto">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Restart Container"
+            class="p-button-success"
+            (click)="restartContainer()"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </p-card>
+</p-panel>
+<div *ngIf="!isLoading">
+  <app-code-highlighter [isActive]="true" [code]="container.details"></app-code-highlighter>
+</div>

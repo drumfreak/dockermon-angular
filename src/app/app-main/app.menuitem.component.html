@@ -1,6 +1,6 @@
 <ng-container>
   <div *ngIf="root && item.visible !== false">
-    <span class="layout-menuitem-text">{{ item.label }}</span>
+    <span class="layout-menuitem-text blue-color">{{ item.label }}</span>
   </div>
   <a
     [attr.href]="item.url"
@@ -31,6 +31,7 @@
     [ngClass]="item.class"
     (mouseenter)="onMouseEnter()"
     pRipple
+    class="font-bold"
     [pTooltip]="item.label"
     [tooltipDisabled]="active || !(root && app.isSlim() && !app.isMobile())"
   >
