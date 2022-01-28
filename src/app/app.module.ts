@@ -21,7 +21,7 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { WebSocketService } from './services/websocket.service';
 
 const config: SocketIoConfig = {
-  url: 'ws://localhost:3810',
+  url: 'ws://localhost:3811/events',
   options: {},
 };
 

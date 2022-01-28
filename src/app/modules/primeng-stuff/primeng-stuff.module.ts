@@ -29,7 +29,7 @@ import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FullCalendarModule } from '@fullcalendar/angular';
+// import { FullCalendarModule } from '@fullcalendar/angular';
 // import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { ImageModule } from 'primeng/image';
@@ -86,11 +86,15 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BlockUIModule } from 'primeng/blockui';
 
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
+// import dayGridPlugin from '@fullcalendar/daygrid';
+// import timeGridPlugin from '@fullcalendar/timegrid';
+// import interactionPlugin from '@fullcalendar/interaction';
 
-FullCalendarModule.registerPlugins([dayGridPlugin, timeGridPlugin, interactionPlugin]);
+// FullCalendarModule.registerPlugins([
+//   dayGridPlugin,
+//   timeGridPlugin,
+//   interactionPlugin,
+// ]);
 
 @NgModule({
   imports: [
@@ -125,7 +129,7 @@ FullCalendarModule.registerPlugins([dayGridPlugin, timeGridPlugin, interactionPl
     FieldsetModule,
     FileUploadModule,
     ImageModule,
-    FullCalendarModule,
+    // FullCalendarModule,
     // GalleriaModule,
     InplaceModule,
     InputNumberModule,
@@ -214,7 +218,7 @@ FullCalendarModule.registerPlugins([dayGridPlugin, timeGridPlugin, interactionPl
     EditorModule,
     FieldsetModule,
     FileUploadModule,
-    FullCalendarModule,
+    // FullCalendarModule,
     // GalleriaModule,
     ImageModule,
     InplaceModule,

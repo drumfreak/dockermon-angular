@@ -9,6 +9,9 @@ import { DockerMemoryLineChartComponent } from './charts/docker-memory-line-char
 import { DockerProcessesBarChartComponent } from './charts/docker-processes-bar-chart/docker-processes-bar-chart.component';
 import { DockerNetworkLineChartComponent } from './charts/docker-network-line-chart/docker-network-line-chart.component';
 import { WebSocketService } from 'src/app/services/websocket.service';
+
+import { Socket } from 'ngx-socket-io';
+
 @Component({
   selector: 'app-docker',
   templateUrl: './docker.component.html',
@@ -33,7 +36,6 @@ export class DockerComponent implements OnInit, OnDestroy {
   lastStats: any = {};
   refresh = false;
   timerSubscription: Subscription = new Subscription();
-
   messages: string[] = [];
 
   @ViewChild('cpuChart') cpuChartViewChild: DockerCpuLineChartComponent =
@@ -59,16 +61,7 @@ export class DockerComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    console.log('Calling ngOnInit');
-    this.socketService.sendMessage('getContainers', { limit: 1000 });
-
-    this.socketService.listener().subscribe((data: any) => {
-      console.log('Listener Setup');
-      if (data) {
-        console.log('Socket message', data);
-      }
-    });
-
+    // HTTP Method
     const r = await this.dockerService.getContainersPaginated({}).toPromise();
     let containers: any = [];
     if (r.status === 'success') {
@@ -116,48 +109,58 @@ export class DockerComponent implements OnInit, OnDestroy {
 
   async getContainerStats() {
     this.isLoading = true;
-    const r2 = await this.dockerService
-      .getStats({
-        limit: 100,
-        containerId: this.selectedContainer.id,
-        sortKey: 'createdAt',
-        sortType: 'DESC',
-        activeFilters: [
-          {
-            filterOperator: 'eq',
-            filterKey: 'containerId',
-            filterValue: this.selectedContainer.id,
-          },
-        ],
-      })
-      .toPromise();
-    // console.log('r2', r2);
-    if (r2.status === 'success') {
-      // console.log('Stats', r2.data);
-      this.stats = r2.data;
-      if (this.stats.length > 0) {
-        this.lastStats = this.stats[this.stats.length - 1];
-      }
-      this.statsCPU = [];
-      this.statsProcesses = [];
-      this.statsMemory = [];
-      this.statsMemoryPercent = [];
-      this.statsNetworkIn = [];
-      this.statsNetworkOut = [];
-      this.statsDates = [];
+    this.socketService.sendMessage('stats', {
+      limit: 100,
+      containerId: this.selectedContainer.id,
+      sortKey: 'createdAt',
+      sortType: 'DESC',
+      activeFilters: [
+        {
+          filterOperator: 'eq',
+          filterKey: 'containerId',
+          filterValue: this.selectedContainer.id,
+        },
+      ],
+    });
 
-      this.stats.map((a: any) => {
-        const date = formatDate(new Date(a.createdAt), 'short', this.localID);
-        this.statsCPU.push({ x: date, y: a.cpu });
-        this.statsProcesses.push({ x: date, y: a.pids });
-        this.statsMemory.push({ x: date, y: a.memory / 10000 });
-        this.statsMemoryPercent.push({ x: date, y: a.memoryPercent });
-        this.statsNetworkIn.push({ x: date, y: a.networkIn / 10000 });
-        this.statsNetworkOut.push({ x: date, y: a.networiOut / 10000 });
-        this.statsDates.push(date);
+    this.socketService.socket1
+      .fromEvent<any>('stats')
+      .subscribe((data: any) => {
+        if (data) {
+          if (data.data) {
+            // console.log('Stats', data.data);
+            this.stats = data.data;
+            this.processStats();
+          }
+        }
       });
+  }
+
+  processStats() {
+    if (this.stats.length > 0) {
+      this.lastStats = this.stats[this.stats.length - 1];
     }
+    this.statsCPU = [];
+    this.statsProcesses = [];
+    this.statsMemory = [];
+    this.statsMemoryPercent = [];
+    this.statsNetworkIn = [];
+    this.statsNetworkOut = [];
+    this.statsDates = [];
+
+    this.stats.map((a: any) => {
+      const date = formatDate(new Date(a.createdAt), 'short', this.localID);
+      this.statsCPU.push({ x: date, y: a.cpu });
+      this.statsProcesses.push({ x: date, y: a.pids });
+      this.statsMemory.push({ x: date, y: a.memory / 10000 });
+      this.statsMemoryPercent.push({ x: date, y: a.memoryPercent });
+      this.statsNetworkIn.push({ x: date, y: a.networkIn / 10000 });
+      this.statsNetworkOut.push({ x: date, y: a.networiOut / 10000 });
+      this.statsDates.push(date);
+    });
+
     this.isLoading = false;
+
     setTimeout(() => {
       this.cpuChartViewChild.updateChart();
       this.memoryChartViewChild.updateChart();
@@ -182,8 +185,20 @@ export class DockerComponent implements OnInit, OnDestroy {
     if (this.refresh) {
       const timerInterval = interval(15 * 1000);
       // console.warn('Subscribing to timer ', timerName);
-      this.timerSubscription = timerInterval.subscribe((val) => {
-        this.getContainerStats();
+      this.timerSubscription = timerInterval.subscribe(() => {
+        this.socketService.sendMessage('stats', {
+          limit: 1000,
+          containerId: this.selectedContainer.id,
+          sortKey: 'createdAt',
+          sortType: 'DESC',
+          activeFilters: [
+            {
+              filterOperator: 'eq',
+              filterKey: 'containerId',
+              filterValue: this.selectedContainer.id,
+            },
+          ],
+        });
       });
     }
   }
