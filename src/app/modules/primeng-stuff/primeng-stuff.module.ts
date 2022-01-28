@@ -73,7 +73,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
-// import { TerminalModule } from 'primeng/terminal';
+import { TerminalModule } from 'primeng/terminal';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TimelineModule } from 'primeng/timeline';
 import { ToastModule } from 'primeng/toast';
@@ -172,7 +172,7 @@ import { BlockUIModule } from 'primeng/blockui';
     TabMenuModule,
     TabViewModule,
     TagModule,
-    // TerminalModule,
+    TerminalModule,
     TimelineModule,
     TieredMenuModule,
     ToastModule,
@@ -262,7 +262,7 @@ import { BlockUIModule } from 'primeng/blockui';
     TabMenuModule,
     TabViewModule,
     TagModule,
-    // TerminalModule,
+    TerminalModule,
     TimelineModule,
     TieredMenuModule,
     ToastModule,

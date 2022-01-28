@@ -67,6 +67,18 @@
     </div>
   </p-card>
 </p-panel>
+
+<p-panel [header]="container?.name + ' Terminal'" [toggleable]="true">
+  <!-- <p-terminal welcomeMessage="Welcome to Dockermon" prompt="bash #" ></p-terminal> -->
+  <ng-terminal #term></ng-terminal>
+</p-panel>
+
+<app-spinner *ngIf="isLoading"></app-spinner>
+
 <div *ngIf="!isLoading">
-  <app-code-highlighter [isActive]="true" [code]="container.details"></app-code-highlighter>
+  <app-code-highlighter title="Container Details" [isActive]="false" [code]="container.details"></app-code-highlighter>
 </div>
+
+<p-panel *ngIf="!isLoading" [header]="container?.name + ' Charts'" [toggleable]="true">
+  <app-docker-container-charts *ngIf="containerId" [containerId]="containerId"></app-docker-container-charts>
+</p-panel>

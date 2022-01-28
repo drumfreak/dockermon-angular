@@ -1,0 +1,31 @@
+<p-card>
+  <div class="grid surface-section p-3">
+    <div class="col-6">
+      <app-docker-cpu-line-chart
+        #cpuChart
+        [cpuData]="statsCPU"
+        [dateData]="statsDates"
+      ></app-docker-cpu-line-chart>
+      <div class="col-12 mt-1"></div>
+      <app-docker-processes-bar-chart
+        #processesChart
+        [chartData]="statsProcesses"
+        [dateData]="statsDates"
+      ></app-docker-processes-bar-chart>
+    </div>
+    <div class="col-6">
+      <app-docker-memory-line-chart
+        #memoryChart
+        [chartData]="statsMemory"
+        [dateData]="statsDates"
+      ></app-docker-memory-line-chart>
+      <div class="col-12 mt-1"></div>
+      <app-docker-network-line-chart
+        #networkChart
+        [chartData1]="statsNetworkIn"
+        [chartData2]="statsNetworkOut"
+        [dateData]="statsDates"
+      ></app-docker-network-line-chart>
+    </div>
+  </div>
+</p-card>

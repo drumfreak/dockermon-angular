@@ -5045,7 +5045,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   font-size: 0.75rem;
 }
 .p-terminal {
-  background: #1e1e1e;
+  background: #000000 !important;
   color: #e6e6e6;
   border: 1px solid #383838;
   padding: 1rem;
