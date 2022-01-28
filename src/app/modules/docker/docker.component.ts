@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DockerService } from './docker.service';
 import { formatDate } from '@angular/common';
@@ -9,8 +10,6 @@ import { DockerMemoryLineChartComponent } from './charts/docker-memory-line-char
 import { DockerProcessesBarChartComponent } from './charts/docker-processes-bar-chart/docker-processes-bar-chart.component';
 import { DockerNetworkLineChartComponent } from './charts/docker-network-line-chart/docker-network-line-chart.component';
 import { WebSocketService } from 'src/app/services/websocket.service';
-
-import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-docker',
@@ -38,8 +37,7 @@ export class DockerComponent implements OnInit, OnDestroy {
   timerSubscription: Subscription = new Subscription();
   messages: string[] = [];
 
-  @ViewChild('cpuChart') cpuChartViewChild: DockerCpuLineChartComponent =
-    {} as DockerCpuLineChartComponent;
+  @ViewChild('cpuChart') cpuChartViewChild: DockerCpuLineChartComponent = {} as DockerCpuLineChartComponent;
   @ViewChild('memoryChart')
   memoryChartViewChild: DockerMemoryLineChartComponent = {} as DockerMemoryLineChartComponent;
   @ViewChild('processesChart')
@@ -80,16 +78,12 @@ export class DockerComponent implements OnInit, OnDestroy {
       this.queryParams = queryParams;
       if (queryParams.containerId) {
         // console.log('queryPAramChanged', queryParams);
-        const c = containers.filter(
-          (a: any) => Number(a.id) === Number(queryParams.containerId),
-        );
+        const c = containers.filter((a: any) => Number(a.id) === Number(queryParams.containerId));
         if (c && c.length > 0) {
           this.selectedContainer = c[0];
           this.containers = containers;
           // console.log('SelectedContainer', this.selectedContainer);
-          const c1 = this.containersOriginal.filter(
-            (a: any) => Number(a.id) === Number(queryParams.containerId),
-          );
+          const c1 = this.containersOriginal.filter((a: any) => Number(a.id) === Number(queryParams.containerId));
           if (c1 && c1.length > 0) {
             this.containerDetails = c1[0].details;
           }
@@ -123,17 +117,14 @@ export class DockerComponent implements OnInit, OnDestroy {
       ],
     });
 
-    this.socketService.socket1
-      .fromEvent<any>('stats')
-      .subscribe((data: any) => {
-        if (data) {
-          if (data.data) {
-            // console.log('Stats', data.data);
-            this.stats = data.data;
-            this.processStats();
-          }
+    this.socketService.socket1.fromEvent<any>('stats').subscribe((data: any) => {
+      if (data) {
+        if (data.data) {
+          this.stats = data.data;
+          this.processStats();
         }
-      });
+      }
+    });
   }
 
   processStats() {
