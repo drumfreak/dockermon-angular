@@ -1,7 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Component, OnInit } from '@angular/core';
+import { interval, Subject, Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { DockerService } from '../modules/docker/docker.service';
+import { WebSocketService } from '../services/websocket.service';
 
 @Component({
   selector: 'app-menu',
@@ -9,44 +11,90 @@ import { DockerService } from '../modules/docker/docker.service';
 })
 export class AppMenuComponent implements OnInit {
   model: any = [];
+  containers: any = [];
+  containerIndex: any = [];
+  socketContainers: any = [];
+  containerListSocket!: Subscription;
+  destroy$: Subject<void> = new Subject();
+  isLoading = true;
+  timerSubscription: Subscription = new Subscription();
 
-  constructor(public app: AppComponent, private dockerService: DockerService) {}
+  constructor(
+    public app: AppComponent,
+    private dockerService: DockerService,
+    private socketService: WebSocketService,
+  ) {}
 
   async ngOnInit() {
+    await this.getContainers();
+    this.containerStatus();
+  }
+
+  async getContainers() {
+    const c: any = await this.dockerService.getContainersPaginated({ limit: 100 }).toPromise();
+    if (c.status === 'success') {
+      this.containers = c.data;
+      this.processContainers();
+    }
+  }
+
+  async buildMenu() {
     this.model = [
       {
-        label: 'Home',
-        icon: 'fa fa-fw fa-home',
-        routerLink: ['/'],
+        label: 'MAIN',
+        icon: 'fa fa-fw fa-briefcase',
+        items: [
+          {
+            label: 'Home',
+            icon: 'fa fa-fw fa-home',
+            routerLink: ['/'],
+          },
+        ],
       },
     ];
+    return true;
+  }
 
+  async processContainers() {
+    this.buildMenu();
     const projects: any = [];
-    const r: any = await this.dockerService.getContainersPaginated({ limit: 100 }).toPromise();
-    if (r.status === 'success') {
-      if (r.data.length > 0) {
-        r.data.filter(function (item:any) {
-          const i = projects.findIndex((x:any) => x.projects == item.projects);
-          if (i <= -1) {
-            const p: any = { name: item.project };
-            p.containers = r.data.filter((a:any) => a.project === item.project);
-            projects.push(p);
-          }
-          return null;
-        });
-      }
+    if (this.containers.length > 0) {
+      this.containers.filter((item: any) => {
+        const i = projects.findIndex((x: any) => x.projects == item.projects);
+        if (i <= -1) {
+          const p: any = { name: item.project };
+          p.containers = this.containers.filter((a: any) => a.project === item.project);
+          projects.push(p);
+        }
+        return null;
+      });
     }
 
     projects.forEach((p: any) => {
-
       const project: any = {
         label: p.name,
         icon: 'fa fa-fw fa-briefcase',
-        items: []
-      }
+        items: [],
+      };
       p.containers.forEach((c: any) => {
+        console.log('container', c.containerId);
+        const c1: any = this.socketContainers.filter((a: any) => {
+           return a.Id.slice(0, 12) === c.containerId
+        });
+
+        let running = false;
+        if (c1 && c1.length > 0) {
+          const details = c1[0];
+          console.log('c1', c1[0]);
+          if (details.State === 'running') {
+            running = true;
+          }
+        }
+
         const item = {
           label: c.name,
+          badge: running ? ' ' : '',
+          badgeClass: running ? 'p-badge-success' : '',
           icon: 'fa fa-fw fa-briefcase',
           routerLink: ['/docker/containers', c.id],
         };
@@ -54,287 +102,50 @@ export class AppMenuComponent implements OnInit {
       });
       this.model.push(project);
     });
+  }
 
-    // this.model = [
-    //   {
-    //     label: 'Home',
-    //     icon: 'fa fa-fw fa-home',
-    //     routerLink: ['/'],
-    //   },
-    //   {
-    //     label: 'Projects',
-    //     icon: 'fa fa-fw fa-briefcase',
-    //     // routerLink: ['/projects'],
-    //     items: [
-    //       {
-    //         label: 'View Projects',
-    //         icon: 'fa fa-fw fa-briefcase',
-    //         routerLink: ['/projects'],
-    //       },
-    //       {
-    //         label: 'Add Projects',
-    //         icon: 'fa fa-fw fa-plus',
-    //         routerLink: ['/projects/add'],
-    //       },
-    //       {
-    //         label: 'View Stages',
-    //         icon: 'fa fa-fw fa-briefcase',
-    //         routerLink: ['/stages'],
-    //       },
-    //       {
-    //         label: 'Add Stages',
-    //         icon: 'fa fa-fw fa-plus',
-    //         routerLink: ['/stages/add'],
-    //       },
-    //     ],
-    //   },
-      // {
-      //   label: 'Teams',
-      //   icon: 'fa fa-fw fa-users',
-      //   // routerLink: ['/teams'],
-      //   items: [
-      //     {
-      //       label: 'View Teams',
-      //       icon: 'fa fa-fw fa-users',
-      //       routerLink: ['/teams'],
-      //     },
-      //     {
-      //       label: 'Add Team',
-      //       icon: 'fa fa-fw fa-user-plus',
-      //       routerLink: ['/teams/add'],
-      //     },
-      //   ],
-      // },
-      // {
-      //   label: 'Developers',
-      //   icon: 'fa fa-fw fa-user-astronaut',
-      //   // routerLink: ['/developers'],
-      //   items: [
-      //     {
-      //       label: 'View Developers',
-      //       icon: 'fa fa-fw fa-users',
-      //       routerLink: ['/developers'],
-      //     },
-      //     {
-      //       label: 'Add Developer',
-      //       icon: 'fa fa-fw fa-user-plus',
-      //       routerLink: ['/developers/add'],
-      //     },
-      //   ],
-      // },
-
-      // {
-      //   label: 'Sprints',
-      //   icon: 'fa fa-fw fa-chart-pie',
-      //   items: [
-      //     {
-      //       label: 'View Sprints',
-      //       icon: 'fa fa-fw fa-chart-bar',
-      //       routerLink: ['/sprints'],
-      //     },
-      //     {
-      //       label: 'Add Sprint',
-      //       icon: 'fa fa-fw fa-plus',
-      //       routerLink: ['/sprints/add'],
-      //     },
-      //   ],
-      // },
-      // {
-      //   label: 'Stories',
-      //   icon: 'fa fa-fw fa-book',
-      //   items: [
-      //     {
-      //       label: 'View Stories',
-      //       icon: 'fa fa-fw fa-book',
-      //       routerLink: ['/stories'],
-      //     },
-      //     {
-      //       label: 'Add Story',
-      //       icon: 'fa fa-fw fa-plus',
-      //       routerLink: ['/stories/add'],
-      //     },
-      //   ],
-      // },
-    // ];
-
-    if (this.app.user && this.app.user.role) {
-      if (this.app.user.role.name == 'Admin') {
-        this.model.push({
-          label: 'Admin',
-          icon: 'fa fa-fw fa-hammer',
-          items: [
-            {
-              icon: 'fa fa-fw fa-users',
-              label: 'View Users',
-              routerLink: ['/admin/users'],
-            },
-            {
-              icon: 'fa fa-fw fa-user-plus',
-              label: 'Add User',
-              routerLink: ['/admin/users/add'],
-            },
-          ],
-        });
-      }
-
-      this.model.push({
-        label: 'Account',
-        icon: 'fa fa-fw fa-user',
-        items: [
-          {
-            icon: 'fa fa-fw fa-user',
-            label: 'Logout',
-            routerLink: ['/auth/logout'],
-          },
-        ],
-      });
-
-      this.model.push({
-        label: 'Logs',
-        icon: 'fa fa-fw fa-file',
-        routerLink: ['/logs'],
+  containerStatus() {
+    if (!this.containerListSocket) {
+      this.containerListSocket = this.socketService.socket1.fromEvent<any>('dockerResuls').subscribe(async (results: any) => {
+        if (results.data) {
+          this.socketContainers = results.data;
+          // console.log('Socket Containers', this.socketContainers);
+          // this.container.details = data.data;
+          this.processContainers();
+        }
       });
     }
+    this.listContainers();
+    this.startTimer();
+  }
 
-    //   this.model = [
-    //     {
-    //       label: 'Favorites',
-    //       icon: 'pi pi-fw pi-home',
-    //       items: [
-    //         { label: 'Dashboard Sales', icon: 'pi pi-fw pi-home', routerLink: ['/'], badge: '4', badgeClass: 'p-badge-info' },
-    //         { label: 'Dashboard Analytics', icon: 'pi pi-fw pi-home', routerLink: ['/favorites/dashboardanalytics'], badge: '2', badgeClass: 'p-badge-success' },
-    //       ],
-    //     },
-    //     {
-    //       label: 'UI Kit',
-    //       icon: 'pi pi-fw pi-star',
-    //       routerLink: ['/uikit'],
-    //       items: [
-    //         { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'], badge: '6', badgeClass: 'p-badge-danger' },
-    //         { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
-    //         { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
-    //         { label: 'Button', icon: 'pi pi-fw pi-mobile', routerLink: ['/uikit/button'], class: 'rotated-icon' },
-    //         { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'], badge: '6', badgeClass: 'p-badge-help' },
-    //         { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-    //         { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-    //         { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-    //         { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-    //         { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-    //         { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'] },
-    //         { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-    //         { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-    //         { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-    //         { label: 'Misc', icon: 'pi pi-fw pi-circle-off', routerLink: ['/uikit/misc'] },
-    //       ],
-    //     },
-    //     {
-    //       label: 'Utilities',
-    //       icon: 'pi pi-fw pi-compass',
-    //       routerLink: ['utilities'],
-    //       items: [
-    //         { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'], badge: '6', badgeClass: 'p-badge-warning' },
-    //         { label: 'Display', icon: 'pi pi-fw pi-desktop', routerLink: ['utilities/display'] },
-    //         { label: 'Elevation', icon: 'pi pi-fw pi-external-link', routerLink: ['utilities/elevation'] },
-    //         { label: 'FlexBox', icon: 'pi pi-fw pi-directions', routerLink: ['utilities/flexbox'] },
-    //         { label: 'Icons', icon: 'pi pi-fw pi-search', routerLink: ['utilities/icons'] },
-    //         { label: 'Text', icon: 'pi pi-fw pi-pencil', routerLink: ['utilities/text'] },
-    //         { label: 'Widgets', icon: 'pi pi-fw pi-star-o', routerLink: ['utilities/widgets'] },
-    //         { label: 'Grid System', icon: 'pi pi-fw pi-th-large', routerLink: ['utilities/grid'] },
-    //         { label: 'Spacing', icon: 'pi pi-fw pi-arrow-right', routerLink: ['utilities/spacing'] },
-    //         { label: 'Typography', icon: 'pi pi-fw pi-align-center', routerLink: ['utilities/typography'] },
-    //       ],
-    //     },
-    //     {
-    //       label: 'Pages',
-    //       icon: 'pi pi-fw pi-briefcase',
-    //       routerLink: ['/pages'],
-    //       items: [
-    //         { label: 'Crud', icon: 'pi pi-fw pi-pencil', routerLink: ['/pages/crud'] },
-    //         { label: 'Calendar', icon: 'pi pi-fw pi-calendar-plus', routerLink: ['/pages/calendar'] },
-    //         { label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/timeline'] },
-    //         { label: 'Wizard', icon: 'pi pi-fw pi-star', routerLink: ['/pages/wizard'] },
-    //         {
-    //           label: 'Landing',
-    //           icon: 'pi pi-fw pi-globe',
-    //           badge: '2',
-    //           badgeClass: 'p-badge-warning',
-    //           items: [
-    //             { label: 'Static', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank' },
-    //             { label: 'Component', icon: 'pi pi-fw pi-globe', routerLink: ['/landing'] },
-    //           ],
-    //         },
-    //         { label: 'Login', icon: 'pi pi-fw pi-sign-in', routerLink: ['/login'] },
-    //         { label: 'Invoice', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/invoice'] },
-    //         { label: 'Help', icon: 'pi pi-fw pi-question-circle', routerLink: ['/pages/help'] },
-    //         { label: 'Error', icon: 'pi pi-fw pi-times-circle', routerLink: ['/error'] },
-    //         { label: 'Not Found', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/notfound'] },
-    //         { label: 'Access Denied', icon: 'pi pi-fw pi-lock', routerLink: ['/access'] },
-    //         { label: 'Contact Us', icon: 'pi pi-fw pi-pencil', routerLink: ['/contactus'] },
-    //         { label: 'Empty', icon: 'pi pi-fw pi-circle-off', routerLink: ['/pages/empty'] },
-    //       ],
-    //     },
-    //     {
-    //       label: 'Hierarchy',
-    //       icon: 'pi pi-fw pi-align-left',
-    //       items: [
-    //         {
-    //           label: 'Submenu 1',
-    //           icon: 'pi pi-fw pi-align-left',
-    //           items: [
-    //             {
-    //               label: 'Submenu 1.1',
-    //               icon: 'pi pi-fw pi-align-left',
-    //               items: [
-    //                 { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-align-left' },
-    //                 { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-align-left' },
-    //                 { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-align-left' },
-    //               ],
-    //             },
-    //             {
-    //               label: 'Submenu 1.2',
-    //               icon: 'pi pi-fw pi-align-left',
-    //               items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-align-left' }],
-    //             },
-    //           ],
-    //         },
-    //         {
-    //           label: 'Submenu 2',
-    //           icon: 'pi pi-fw pi-align-left',
-    //           items: [
-    //             {
-    //               label: 'Submenu 2.1',
-    //               icon: 'pi pi-fw pi-align-left',
-    //               items: [
-    //                 { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-align-left' },
-    //                 { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-align-left' },
-    //               ],
-    //             },
-    //             {
-    //               label: 'Submenu 2.2',
-    //               icon: 'pi pi-fw pi-align-left',
-    //               items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-align-left' }],
-    //             },
-    //           ],
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       label: 'Start',
-    //       icon: 'pi pi-fw pi-download',
-    //       items: [
-    //         {
-    //           label: 'Buy Now',
-    //           icon: 'pi pi-fw pi-shopping-cart',
-    //           url: ['https://www.primefaces.org/store'],
-    //         },
-    //         {
-    //           label: 'Documentation',
-    //           icon: 'pi pi-fw pi-info-circle',
-    //           routerLink: ['/documentation'],
-    //         },
-    //       ],
-    //     },
-    //   ];
-    // }
+  listContainers() {
+    setTimeout(() => {
+      this.socketService.sendMessage('docker', {
+        command: 'listContainers',
+      });
+    });
+  }
+
+  startTimer() {
+    this.stopTimer();
+    const timerInterval = interval(1 * 1000);
+    // console.warn('Subscribing to timer ', timerName);
+    this.timerSubscription = timerInterval.subscribe(() => {
+      this.listContainers();
+    });
+    
+  }
+
+  stopTimer() {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
+  }
+
+  onDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.stopTimer();
   }
 }
