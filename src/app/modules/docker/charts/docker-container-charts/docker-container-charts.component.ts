@@ -134,7 +134,7 @@ export class DockerContainerChartsComponent implements OnInit, OnDestroy {
       // console.warn('Subscribing to timer ', timerName);
       this.timerSubscription = timerInterval.subscribe(() => {
         this.socketService.sendMessage('stats', {
-          limit: 1000,
+          limit: 100,
           containerId: this.container.id,
           sortKey: 'createdAt',
           sortType: 'DESC',
