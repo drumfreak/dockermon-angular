@@ -31,7 +31,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   async getContainers() {
-    const c: any = await this.dockerService.getContainersPaginated({ limit: 100 }).toPromise();
+    const c: any = await this.dockerService.getContainersPaginated({ limit: 100, running: true }).toPromise();
     if (c.status === 'success') {
       this.containers = c.data;
       this.processContainers();
@@ -77,15 +77,18 @@ export class AppMenuComponent implements OnInit {
         items: [],
       };
       p.containers.forEach((c: any) => {
-        console.log('container', c.containerId);
-        const c1: any = this.socketContainers.filter((a: any) => {
-           return a.Id.slice(0, 12) === c.containerId
-        });
-
+        // console.log('container', c.containerId);
+        let c1:any;
+        if (this.socketContainers && this.socketContainers.length > 0) {
+          c1 = this.socketContainers.filter((a: any) => {
+            return a.Id.slice(0, 12) === c.containerId
+         });
+        }
+      
         let running = false;
         if (c1 && c1.length > 0) {
           const details = c1[0];
-          console.log('c1', c1[0]);
+          // console.log('c1', c1[0]);
           if (details.State === 'running') {
             running = true;
           }

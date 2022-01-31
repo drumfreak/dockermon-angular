@@ -60,7 +60,7 @@ export class DockerComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     // HTTP Method
-    const r = await this.dockerService.getContainersPaginated({}).toPromise();
+    const r = await this.dockerService.getContainersPaginated({ running: true }).toPromise();
     let containers: any = [];
     if (r.status === 'success') {
       this.containersOriginal = r.data;
@@ -177,6 +177,9 @@ export class DockerComponent implements OnInit, OnDestroy {
       const timerInterval = interval(15 * 1000);
       // console.warn('Subscribing to timer ', timerName);
       this.timerSubscription = timerInterval.subscribe(() => {
+        if (!this.selectedContainer?.id) {
+          return
+        }
         this.socketService.sendMessage('stats', {
           limit: 1000,
           containerId: this.selectedContainer.id,
